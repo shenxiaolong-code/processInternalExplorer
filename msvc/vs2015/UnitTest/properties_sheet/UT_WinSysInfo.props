@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets">
+    <Import Project="UT_Feature.props" />
+    <Import Project="..\..\properties_sheet\WinSysInfo.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>14.0.25431.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <Link />
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\sources\WinSysInfo\include\;$(ProjectDir)..\..\..\sources\SystemExplorer\include\;"$(CorePath)\sources\UnitTest\UnitTestKit\include\";%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup />
+</Project>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="SystemExplorer"
+	InheritedPropertySheets=".\src_feature_project.vsprops;..\..\..\..\Core\msvc\vs2008\properties_sheet\project_setting\MiniMPL.vsprops;..\..\..\..\Core\msvc\vs2008\properties_sheet\project_setting\OsBase.vsprops"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		AdditionalIncludeDirectories="&quot;$(projectDir)..\..\sources\SystemExplorer\include\&quot;;&quot;$(CoreSrcPath)\OsBase\include\&quot;;&quot;$(CoreSrcPath)\MiniMPL\include\&quot;;$(NOINHERIT)"
+	/>
+</VisualStudioPropertySheet>

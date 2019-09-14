@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="UT_Feature"
+	InheritedPropertySheets="..\..\..\..\..\Core\msvc\vs2008\UnitTest\properties_sheet\UnitTestKit.vsprops;..\..\..\..\..\Core\msvc\vs2008\properties_sheet\general_setting\linker_switches_exe.vsprops"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		AdditionalIncludeDirectories="&quot;$(CoreSrcPath)\UnitTest\UnitTestKit\include\&quot;;&quot;$(CoreSrcPath)\MiniMPL\include\&quot;;$(NOINHERIT)"
+	/>
+</VisualStudioPropertySheet>

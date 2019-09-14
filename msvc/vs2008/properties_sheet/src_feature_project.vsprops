@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="src_feature_project"
+	InheritedPropertySheets="..\..\..\..\Core\msvc\vs2008\properties_sheet\general_setting\linker_switches_lib.vsprops"
+	>
+	<UserMacro
+		Name="CoreSrcPath"
+		Value="$(SolutionDir)..\..\..\Core\sources"
+		PerformEnvironmentSet="true"
+	/>
+</VisualStudioPropertySheet>

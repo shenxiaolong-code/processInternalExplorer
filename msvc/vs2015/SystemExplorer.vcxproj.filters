@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\sources\SystemExplorer\src\getCurContext.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sources\SystemExplorer\src\HoverWindowMonitor.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sources\SystemExplorer\src\PEFileExplorer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sources\SystemExplorer\src\peheaderhelper.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sources\SystemExplorer\src\ProcessExplorer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sources\SystemExplorer\src\StackExplorer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sources\SystemExplorer\src\stackInfoDef.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sources\SystemExplorer\src\stackInfoDisplayer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sources\SystemExplorer\src\WindowExplorer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\HoverWindowMonitor.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\HoverWindowReceiver.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\PEFileExplorer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\peheaderdef.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\peheaderhelper.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\ProcessExplorer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\ProcessInfoDef.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\StackExplorer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\stackInfoDef.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\WindowExplorer.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\WindowinfoDef.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
