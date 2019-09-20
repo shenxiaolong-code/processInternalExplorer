@@ -1,10 +1,10 @@
 #ifndef __WINDOWEXPLORER_H__
 #define __WINDOWEXPLORER_H__
 /***********************************************************************************************************************
-* Description         :
-* Author              : Shen.Xiaolong (Shen Tony) (2009-2016)
+* Description         : query window UI info , include its child window , text , size.
+* Author              : Shen.Xiaolong (2009-2016)
 * Mail                : xlshen2002@hotmail.com,  xlshen@126.com
-* verified platform   : VS2008 (2016-12-07 17:22:18.93)
+* verified platform   : VS2008 (2016-12-07)
 * copyright:          : free to use / modify / sale in free and commercial software.
 *                       Unique limit: MUST keep those copyright comments in all copies and in supporting documentation.
 *                       latest Version of The Code Project Open License (CPOL : http://www.codeproject.com/)

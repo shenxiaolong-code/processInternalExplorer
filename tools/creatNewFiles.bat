@@ -50,6 +50,10 @@ set h_=.h
 set testFolderName=UnitTests
 set tcKitFolderName=UnitTestKit
 
+::set comment head info
+set "AuthorInfo=Shen.Xiaolong ^(at %date%^) , xlshen@126.com  xlshen2002@hotmail.com"
+set "CopyrightInfo=free to use / modify / sale in free and commercial software with those head comments."
+
 if {%fullFileName%}=={} @echo Empty parameter & goto :End
 call :parseFileName %fullFileName%
 if not {%~2}=={} set modeDelete=1
@@ -154,11 +158,8 @@ set guard_head_File=__%upperFileName%_%upperExtName%__
 @echo #define %guard_head_File%
 @echo /***********************************************************************************************************************
 @echo * Description         :
-@echo * Author              : Shen.Xiaolong ^(Shen Tony^) ^(2009-%date:~0,4%^)
-@echo * Mail                : xlshen2002@hotmail.com,  xlshen@126.com
-@echo * verified platform   : VS2008 ^(create/refactor on %date:~0,10% %time%^)
-@echo * copyright:          : free to use / modify / sale in free and commercial software.
-@echo *                       Unique limit: MUST keep those copyright comments in all copies and in supporting documentation.
+@echo * Author              : %AuthorInfo%
+@echo * Copyright           : %CopyrightInfo%
 @echo ***********************************************************************************************************************/
 @echo #include ^<%MPLProject%/libConfig.h^>
 @echo.
@@ -240,15 +241,12 @@ exit /b 0
 :generateTestFileBody
 @if Not {%subFolderName%}=={} set testconfigPath=../
 @if {%UseComponmentFolderInCpp%}=={1} set testconfigPath=%testconfigPath%../
-@echo #include "testconfig_%projectName%.h"
+@echo #include "../testconfig_%projectName%.h"
 @echo #include ^<MiniMPL/macro_init.h^>
 @echo /***********************************************************************************************************************
 @echo * Description         : test file for ^<%projectName%/%fileName%%extName%^>
-@echo * Author              : Shen.Xiaolong ^(Shen Tony,2009-%date:~0,4%^)
-@echo * Mail                : xlshen2002@gmail.com,  xlshen@126.com
-@echo * verified platform   : VS2008 ^(create/refactor on %date:~0,10% %time%^)
-@echo * copyright:          : free to use / modify / sale in free and commercial software.
-@echo *                       Unique limit: MUST keep those copyright comments in all copies and in supporting documentation.
+@echo * Author              : %AuthorInfo%
+@echo * Copyright           : %CopyrightInfo%
 @echo * usage demo          : #define RUN_EXAMPLE_%upperFileName% to run this demo
 @echo ***********************************************************************************************************************/
 @echo #define RUN_EXAMPLE_%upperFileName%
@@ -295,7 +293,7 @@ exit /b 0
 @echo.
 @echo ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @echo     #if defined^(RUN_WARNING_NO_TESTCASE_RUN^)
-@echo     GLOBALVAR^(RUN_%NameMacro%^)=^(outputTxt^(^(TXT^("[Unit test run disabled] %fileName%%extName%\n%%s(%%d)\n"^),TXT^(__FILE__^),__LINE__^)^),1^);
+@echo     GLOBALVAR^(RUN_%NameMacro%^)=^(outputTxtV^(TXT^("[Unit test run disabled] %fileName%%extName%\n%%s(%%d)\n"^),TXT^(__FILE__^),__LINE__^),1^);
 @echo     #endif
 @echo.
 @echo     #if defined^(BUILD_WARNING_NO_TESTCASE_RUN^)
@@ -306,7 +304,7 @@ exit /b 0
 @echo.
 @echo #else //else of COMPILE_EXAMPLE_%upperFileName%
 @echo     #if defined^(RUN_WARNING_NO_TESTCASE_COMPILE^)
-@echo     GLOBALVAR^(COMPILE_%NameMacro%^)=^(outputTxt^(^(TXT^("[Unit test compile disabled] %fileName%%extName%\n%%s(%%d)\n"^),TXT^(__FILE__^),__LINE__^)^),1^);
+@echo     GLOBALVAR^(COMPILE_%NameMacro%^)=^(outputTxtV^(TXT^("[Unit test compile disabled] %fileName%%extName%\n%%s(%%d)\n"^),TXT^(__FILE__^),__LINE__^),1^);
 @echo     #endif
 @echo.
 @echo     #if defined^(BUILD_WARNING_NO_TESTCASE_COMPILE^)
@@ -349,11 +347,8 @@ for /f "usebackq" %%i in ( ` type %testConfig_project% ^| find /c "RUN_EXAMPLE_%
 @echo /***********************************************************************************************************************
 @echo * Description         : test config file for project %projectName%
 @echo *                       open/close macro to enable/disable test case for specified test file.
-@echo * Author              : Shen.Xiaolong ^(Shen Tony,2009-%date:~0,4%^)
-@echo * Mail                : xlshen2002@gmail.com,  xlshen@126.com
-@echo * verified platform   : VS2008 ^(create/refactor on %date:~0,10% %time%^)
-@echo * copyright:          : free to use / modify / sale in free and commercial software.
-@echo *                       Unique limit: MUST keep those copyright comments in all copies and in supporting documentation.
+@echo * Author              : %AuthorInfo%
+@echo * Copyright           : %CopyrightInfo%
 @echo ***********************************************************************************************************************/
 @echo #include ^<UnitTestKit/testconfig.h^>
 @echo.
@@ -452,20 +447,22 @@ if exist %%i    del /F /Q /A:-S %%i
 @echo.
 goto :eof
 
-:quickConfig_MiniMPL
-set projectName=MiniMPL
-set componmentName=MiniMPL
+:quickConfig_Excel
+set projectName=Excel
+set componmentName=Excel
 set UseComponmentFolderInCpp=0
 :: set namespace config
-set bAddNamespace=1
-set defNamespace=MiniMPL
+set bAddNamespace=0
+set defNamespace=OS_Win32
 goto :eof
 
-:quickConfig_OsBase
-set projectName=OsBase
+:quickConfig_SystemExplorer
+set projectName=SystemExplorer
+set componmentName=SystemExplorer
 :: set namespace config
+set bAddNamespace=0
+set UseComponmentFolderInCpp=0
 set defNamespace=OS_Win32
-set UseComponmentFolderInCpp=1
 goto :eof
 
 :parseFileName

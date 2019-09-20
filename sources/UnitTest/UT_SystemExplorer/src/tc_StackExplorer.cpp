@@ -39,7 +39,22 @@ namespace UnitTest
 
     int Func5()
     {
-        //     StackExplorer se(GetCurrentProcess());
+        StackExplorer se(GetCurrentProcess());
+		StackInfoDisplayer sip;
+
+		PVOID pHere = Func5;
+		pHere = PVOID(DWORD(pHere)+0x100);
+		AddressInfo		iAddr;
+		se.resloveAddrInfo(pHere, iAddr);
+		sip.print(iAddr);
+		pHere = se.getCallerAddr(1);
+		se.resloveAddrInfo(pHere, iAddr);
+		sip.print(iAddr);
+
+		CallStackS rStacks;
+		se.resloveStacks(rStacks);
+		
+		sip.print(rStacks);
         //     se.DumpStack(GetCurrentThread(),NULL);
 
         //RaiseException(1,0,2,0);    

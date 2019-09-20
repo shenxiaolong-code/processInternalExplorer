@@ -25,8 +25,20 @@
     <ClCompile Include="..\..\..\sources\UnitTest\UT_SystemExplorer\UT_SystemExplorer.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\sources\UnitTest\UT_SystemExplorer\src\tc_exceptionhelper.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\sources\UnitTest\UT_SystemExplorer\src\tc_functionhook.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\sources\UnitTest\UT_SystemExplorer\src\tc_functionhook_material.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\sources\UnitTest\UT_SystemExplorer\testconfig_SystemExplorer.h" />
+    <ClInclude Include="..\..\..\sources\UnitTest\UT_SystemExplorer\src\tc_functionhook_material.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,8 +1,8 @@
 #ifndef __PEHEADERHELPER_H__
 #define __PEHEADERHELPER_H__
 /***********************************************************************************************************************
-* Description         :
-* Author              : Shen.Xiaolong (Shen Tony) (2009-2018)
+* Description         : wrapper for window PE file parser
+* Author              : Shen.Xiaolong (2009-2018)
 * Mail                : xlshen2002@hotmail.com,  xlshen@126.com
 * verified platform   : VS2008 (create/refactor on 2018-01-12 15:24:25.89)
 * copyright:          : free to use / modify / sale in free and commercial software.

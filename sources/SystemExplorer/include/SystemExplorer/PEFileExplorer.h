@@ -1,8 +1,8 @@
 #ifndef __PEFILEEXPLORER_H__
 #define __PEFILEEXPLORER_H__
 /***********************************************************************************************************************
-* Description         :
-* Author              : Shen.Xiaolong (Shen Tony) (2009-2016)
+* Description         : windows PE file parser
+* Author              : Shen.Xiaolong (2009-2016)
 * Mail                : xlshen2002@hotmail.com,  xlshen@126.com
 * verified platform   : VS2008 (2016-12-07 18:28:02.80)
 * copyright:          : free to use / modify / sale in free and commercial software.
@@ -26,12 +26,6 @@ public:
 
     enum EFType{F_export=1,F_import=2,F_All=3};
     std::vector<FuncThunk> enumFunc(EFType et,HMODULE hPeMod = NULL); //enumerate Function in specified module
-
 };
-
-
-
-
-
 
 #endif // __PEFILEEXPLORER_H__

@@ -1,8 +1,8 @@
 #ifndef __HOVERWINDOWMONITOR_H__
 #define __HOVERWINDOWMONITOR_H__
 /***********************************************************************************************************************
-* Description         :
-* Author              : Shen.Xiaolong (Shen Tony) (2009-2016)
+* Description         : monitor window which is hovered by mouse.
+* Author              : Shen.Xiaolong (2009-2016)
 * Mail                : xlshen2002@hotmail.com,  xlshen@126.com
 * verified platform   : VS2008 (2016-12-08  9:44:36.45)
 * copyright:          : free to use / modify / sale in free and commercial software.
@@ -37,10 +37,5 @@ protected:
     TpHoverWindowReceiver       m_pReceivcer;
     stlSmartptr<CThread>        m_pThrd;
 };
-
-
-
-
-
 
 #endif // __HOVERWINDOWMONITOR_H__

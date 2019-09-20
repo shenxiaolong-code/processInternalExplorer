@@ -67,6 +67,10 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\sources\SystemExplorer\src\exceptionhelper.cpp" />
+    <ClCompile Include="..\..\sources\SystemExplorer\src\executablememoryreadwriter.cpp" />
+    <ClCompile Include="..\..\sources\SystemExplorer\src\functionhook_exported.cpp" />
+    <ClCompile Include="..\..\sources\SystemExplorer\src\functionhook_user.cpp" />
     <ClCompile Include="..\..\sources\SystemExplorer\src\getCurContext.c" />
     <ClCompile Include="..\..\sources\SystemExplorer\src\HoverWindowMonitor.cpp" />
     <ClCompile Include="..\..\sources\SystemExplorer\src\PEFileExplorer.cpp" />
@@ -78,6 +82,8 @@
     <ClCompile Include="..\..\sources\SystemExplorer\src\WindowExplorer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\exceptionhelper.h" />
+    <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\functionhook.h" />
     <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\HoverWindowMonitor.h" />
     <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\HoverWindowReceiver.hpp" />
     <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\PEFileExplorer.h" />

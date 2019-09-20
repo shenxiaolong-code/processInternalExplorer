@@ -2,7 +2,7 @@
 #define __STACKEXPLORER_H__
 /********************************************************************
 	created:	22:8:2013   14:06
-	author:		Shen Tony
+	author:		Shen xiaolong
 	
 	purpose:	use dbghlp.dll to resolve symbol info. 
                 refer to (CodeProject --> StackWalker)

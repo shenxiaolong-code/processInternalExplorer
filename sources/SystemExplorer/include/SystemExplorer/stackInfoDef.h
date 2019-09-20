@@ -1,16 +1,20 @@
 #ifndef SYMINFODEF_H__
 #define SYMINFODEF_H__
 /************************************************************************************
-author  :	Shen Tony,2009-2017
+author  :	Shen xiaolong , xlshen@126.com ,2009-2017
 verified: 	VS2008	
-purpose :	data structure definde for StackExplorer
+purpose :	data structure definition for StackExplorer
 *************************************************************************************/
 #include <MiniMPL\platformEnv.h>
 
 #ifdef MSVC
 #include <MiniMPL/productSpecialDef.h>
 #include <Windows.h>
+
+#pragma warning(push)
+#pragma warning(disable:4091)
 #include <imagehlp.h>
+#pragma warning(pop)
 
 struct ModInfo
 {

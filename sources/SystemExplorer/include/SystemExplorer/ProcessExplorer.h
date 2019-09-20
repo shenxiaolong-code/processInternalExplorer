@@ -2,7 +2,7 @@
 #define __PROCESSEXPLORER_H__
 /***********************************************************************************************************************
 * Description         : explorer process information in current system
-* Author              : Shen.Xiaolong (Shen Tony) (2009-2016)
+* Author              : Shen.Xiaolong (2009-2016)
 * Mail                : xlshen2002@hotmail.com,  xlshen@126.com
 * verified platform   : VS2008 (2016-12-07 13:49:33.06)
 * copyright:          : free to use / modify / sale in free and commercial software.

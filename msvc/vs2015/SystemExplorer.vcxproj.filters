@@ -38,6 +38,18 @@
     <ClCompile Include="..\..\sources\SystemExplorer\src\WindowExplorer.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\sources\SystemExplorer\src\exceptionhelper.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sources\SystemExplorer\src\functionhook_exported.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sources\SystemExplorer\src\functionhook_user.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\sources\SystemExplorer\src\executablememoryreadwriter.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\HoverWindowMonitor.h">
@@ -71,6 +83,12 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\WindowinfoDef.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\exceptionhelper.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\functionhook.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

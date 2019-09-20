@@ -1,8 +1,8 @@
 #ifndef __PEHEADERDEF_H__
 #define __PEHEADERDEF_H__
 /***********************************************************************************************************************
-* Description         :
-* Author              : Shen.Xiaolong (Shen Tony) (2009-2018)
+* Description         : data definition file for PE file parser
+* Author              : Shen.Xiaolong (2009-2018)
 * Mail                : xlshen2002@hotmail.com,  xlshen@126.com
 * verified platform   : VS2008 (create/refactor on 2018-01-12 15:14:06.69)
 * copyright:          : free to use / modify / sale in free and commercial software.
