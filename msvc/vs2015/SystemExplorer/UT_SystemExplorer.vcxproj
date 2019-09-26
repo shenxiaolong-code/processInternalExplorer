@@ -11,8 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{97050D74-EC6E-4648-A60B-E38F3DB018A0}</ProjectGuid>
-    <RootNamespace>UT_WinSysInfo</RootNamespace>
+    <ProjectGuid>{E57FB11C-A4C5-4D4A-970D-D63A5013B7EC}</ProjectGuid>
+    <RootNamespace>UT_SystemExplorer</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -32,11 +32,11 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="properties_sheet\UT_WinSysInfo.props" />
+    <Import Project="UT_SystemExplorer.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="properties_sheet\UT_WinSysInfo.props" />
+    <Import Project="UT_SystemExplorer.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -52,7 +52,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
+      <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader />
@@ -90,17 +90,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\sources\UnitTest\UT_WinSysInfo\src\tc_sysSpy.cpp" />
-    <ClCompile Include="..\..\..\sources\UnitTest\UT_WinSysInfo\UT_WinSysInfo.cpp" />
+    <ClCompile Include="..\..\..\sources\UnitTest\UT_SystemExplorer\src\tc_exceptionhelper.cpp" />
+    <ClCompile Include="..\..\..\sources\UnitTest\UT_SystemExplorer\src\tc_functionhook.cpp" />
+    <ClCompile Include="..\..\..\sources\UnitTest\UT_SystemExplorer\src\tc_functionhook_material.cpp" />
+    <ClCompile Include="..\..\..\sources\UnitTest\UT_SystemExplorer\src\tc_HoverWindowMonitor.cpp" />
+    <ClCompile Include="..\..\..\sources\UnitTest\UT_SystemExplorer\src\tc_PEFileExplorer.cpp" />
+    <ClCompile Include="..\..\..\sources\UnitTest\UT_SystemExplorer\src\tc_ProcessExplorer.cpp" />
+    <ClCompile Include="..\..\..\sources\UnitTest\UT_SystemExplorer\src\tc_StackExplorer.cpp" />
+    <ClCompile Include="..\..\..\sources\UnitTest\UT_SystemExplorer\src\tc_WindowExplorer.cpp" />
+    <ClCompile Include="..\..\..\sources\UnitTest\UT_SystemExplorer\UT_SystemExplorer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\sources\UnitTest\UT_WinSysInfo\testconfig_WinSysInfo.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\WinSysInfo.vcxproj">
-      <Project>{dfa70dd0-a8d1-474c-8acf-de3814c9ee87}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
+    <ClInclude Include="..\..\..\sources\UnitTest\UT_SystemExplorer\src\tc_functionhook_material.h" />
+    <ClInclude Include="..\..\..\sources\UnitTest\UT_SystemExplorer\testconfig_SystemExplorer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

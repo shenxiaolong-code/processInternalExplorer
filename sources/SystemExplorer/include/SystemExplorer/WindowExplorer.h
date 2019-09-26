@@ -16,7 +16,7 @@
 struct WindowFinder
 {
     HWND findWindowHwndByName(char const* lpWindowName);
-    HWND findWindowHwndByProcessID(DWORD dwPID);
+    HWND findMainHwndByPID(DWORD dwPID);									//reverse procedure of ProcessFinder::findProcessByHwnd
     HWND findWindowHwndByPoint( POINT pt ,bool bChkTransparentWnd=false);
     HWND findWindowHwndByMouse(bool bChkTransparentWnd=false);
 };
@@ -28,8 +28,9 @@ public:
 	WindowExplorer(HWND hWnd);
 	virtual ~WindowExplorer();
 
-    unsigned    getAllChildWndsOfWnd(stlVector<SubWndInfo>& subChildWnds);
+    unsigned    getAllChildHwnd(stlVector<HWND>& subChildWnds);
     bool        getOverviewInfo(WndOverview& wi);
+	bool        getWindInfo(SubWndInfo& wi);
 
     bool        closeWindow();
 

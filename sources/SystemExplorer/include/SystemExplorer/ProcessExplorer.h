@@ -19,9 +19,9 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 struct ProcessFinder
 {
-    unsigned EnumRunningProcesses(std::vector<DWORD>& rPIDs);
-    unsigned EnumRunningProcesses(std::vector<PROCESSENTRY32>& rProcess);
-    bool     findProcessByWnd(HWND hWnd,DWORD& dwPID);
+    unsigned enumRunningProcesses(std::vector<DWORD>& rPIDs);
+    unsigned enumRunningProcesses(std::vector<PROCESSENTRY32>& rProcess);
+    bool     findProcessByHwnd(HWND hWnd,DWORD& dwPID);		//reverse procedure of WindowFinder::findMainHwndByPID
 
     template<typename T>    
     bool     findProcessByName( T const& rExeName,DWORD& dwPID )
@@ -33,7 +33,7 @@ struct ProcessFinder
     bool     findProcessBy(T const& rVal,TM PROCESSENTRY32::*const ptr,DWORD& dwPID )
     {
         std::vector<PROCESSENTRY32> ps;
-        if (EnumRunningProcesses(ps)>0)
+        if (enumRunningProcesses(ps)>0)
         { 
             PROCESSENTRY32* pP=MiniMPL::find(ps,MiniMPL::makeUnaryTester_Result(ptr,rVal,MiniMPL::CEqual()));
             if (pP)

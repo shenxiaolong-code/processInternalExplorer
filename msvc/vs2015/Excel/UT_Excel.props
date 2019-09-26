@@ -1,16 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets">
-    <Import Project="..\..\..\..\..\Core\msvc\vs2015\UnitTest\properties_sheet\UnitTestKit.props" />
-    <Import Project="..\..\..\..\..\Core\msvc\vs2015\properties_sheet\general_setting\linker_switches_exe.props" />
+    <Import Project="Excel.props" />
+    <Import Project="..\UT_Feature.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>14.0.25431.1</_ProjectFileVersion>
   </PropertyGroup>
   <ItemDefinitionGroup>
+    <Link />
     <ClCompile>
-      <AdditionalIncludeDirectories>$(CorePath)\sources\OsBase\include\;$(CorePath)\sources\MiniMPL\include\;$(CorePath)\sources\UnitTest\UnitTestKit\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(CorePath)\sources\UnitTest\UnitTestKit\include\;$(ProjectDir)..\..\..\sources\Excel\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup />

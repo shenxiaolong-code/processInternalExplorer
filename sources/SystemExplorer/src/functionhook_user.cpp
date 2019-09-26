@@ -53,7 +53,7 @@ namespace Win_x86
 		return nullptr;
 	}	
 	//////////////////////////////////////////////////////////////////////////
-	bool UserFuncHook::restore(ThunkType pThunk)
+	bool UserFuncHook::restoreHook(ThunkType pThunk)
 	{
 		if (pThunk)
 		{
@@ -117,7 +117,7 @@ namespace Win_x86
 			LPVOID pOldFuncEntry = VirtualAllocEx(GetCurrentProcess(), NULL, 3*sizeof(JmpInstruction_t), MEM_RESERVE | MEM_COMMIT, PAGE_EXECUTE_READWRITE);
 			memcpy(pOldFuncEntry, &pThunk->m_oldJmpInstruction, sizeof(JmpInstruction_t));
 			JmpInstruction_t pNewJmpInstruction = { 0xE9,DWORD(pOldFunc) - DWORD(pOldFuncEntry) - sizeof(JmpInstruction_t) };
-			memcpy((unsigned char*)pOldFuncEntry + sizeof(JmpInstruction_t), &pNewJmpInstruction, 5);
+			memcpy((unsigned char*)pOldFuncEntry + sizeof(JmpInstruction_t), &pNewJmpInstruction, sizeof(JmpInstruction_t));
 			pThunk->m_originalOldFuncEntryE8 = pOldFuncEntry;
 
 			//hook old function

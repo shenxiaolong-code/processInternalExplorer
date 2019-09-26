@@ -11,8 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{383B6936-A825-4D4A-AE0C-2E39641CCF5F}</ProjectGuid>
-    <RootNamespace>SystemExplorer</RootNamespace>
+    <ProjectGuid>{6DF39D28-5907-4706-958E-0FC31502576E}</ProjectGuid>
+    <RootNamespace>Excel</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -32,11 +32,11 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="properties_sheet\SystemExplorer.props" />
+    <Import Project="Excel.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="properties_sheet\SystemExplorer.props" />
+    <Import Project="Excel.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -67,39 +67,16 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\sources\SystemExplorer\src\exceptionhelper.cpp" />
-    <ClCompile Include="..\..\sources\SystemExplorer\src\executablememoryreadwriter.cpp" />
-    <ClCompile Include="..\..\sources\SystemExplorer\src\functionhook_exported.cpp" />
-    <ClCompile Include="..\..\sources\SystemExplorer\src\functionhook_user.cpp" />
-    <ClCompile Include="..\..\sources\SystemExplorer\src\getCurContext.c" />
-    <ClCompile Include="..\..\sources\SystemExplorer\src\HoverWindowMonitor.cpp" />
-    <ClCompile Include="..\..\sources\SystemExplorer\src\PEFileExplorer.cpp" />
-    <ClCompile Include="..\..\sources\SystemExplorer\src\peheaderhelper.cpp" />
-    <ClCompile Include="..\..\sources\SystemExplorer\src\ProcessExplorer.cpp" />
-    <ClCompile Include="..\..\sources\SystemExplorer\src\StackExplorer.cpp" />
-    <ClCompile Include="..\..\sources\SystemExplorer\src\stackInfoDef.cpp" />
-    <ClCompile Include="..\..\sources\SystemExplorer\src\stackInfoDisplayer.cpp" />
-    <ClCompile Include="..\..\sources\SystemExplorer\src\WindowExplorer.cpp" />
+    <ClCompile Include="..\..\..\sources\Excel\src\ExcelDataType.cpp" />
+    <ClCompile Include="..\..\..\sources\Excel\src\OleExcel.cpp" />
+    <ClCompile Include="..\..\..\sources\Excel\src\oleExcelWrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\exceptionhelper.h" />
-    <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\functionhook.h" />
-    <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\HoverWindowMonitor.h" />
-    <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\HoverWindowReceiver.hpp" />
-    <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\PEFileExplorer.h" />
-    <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\peheaderdef.h" />
-    <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\peheaderhelper.h" />
-    <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\ProcessExplorer.h" />
-    <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\ProcessInfoDef.h" />
-    <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\StackExplorer.h" />
-    <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\stackInfoDef.h" />
-    <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\WindowExplorer.h" />
-    <ClInclude Include="..\..\sources\SystemExplorer\include\SystemExplorer\WindowinfoDef.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Core\msvc\vs2015\OsBase.vcxproj">
-      <Project>{ca603705-c41e-4248-a3e0-c5960721f591}</Project>
-    </ProjectReference>
+    <ClInclude Include="..\..\..\sources\Excel\include\Excel\ExcelDataType.h" />
+    <ClInclude Include="..\..\..\sources\Excel\include\Excel\ExcelEnvDef.h" />
+    <ClInclude Include="..\..\..\sources\Excel\include\Excel\ExcelFileFormat.h" />
+    <ClInclude Include="..\..\..\sources\Excel\include\Excel\OleExcel.h" />
+    <ClInclude Include="..\..\..\sources\Excel\include\Excel\oleTypeTraits.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -20,7 +20,6 @@ typedef struct _ProcessMemoryInfo
     PROCESS_MEMORY_COUNTERS     m_entry;     //psapi.h
 } ProcessMemoryInfo,*LPProcessMemoryInfo;
 
-/*/
 typedef struct _tagProcWildInfo
 {
     HWND Hwnd;
@@ -28,6 +27,7 @@ typedef struct _tagProcWildInfo
     stlChar szClassName[128];
 } ProcWildInfo,*lpProcWildInfo;
 
+/*/
 typedef struct _ProcessInfo32 
 {
     stlSmartptr<PROCESSENTRY32>     ProcInfo;

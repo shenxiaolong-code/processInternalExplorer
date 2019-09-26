@@ -11,30 +11,30 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\sources\Excel\src\ExcelDataType.cpp">
+    <ClCompile Include="..\..\..\sources\Excel\src\ExcelDataType.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\sources\Excel\src\OleExcel.cpp">
+    <ClCompile Include="..\..\..\sources\Excel\src\OleExcel.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\sources\Excel\src\oleExcelWrapper.cpp">
+    <ClCompile Include="..\..\..\sources\Excel\src\oleExcelWrapper.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\sources\Excel\include\Excel\ExcelDataType.h">
+    <ClInclude Include="..\..\..\sources\Excel\include\Excel\ExcelDataType.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\sources\Excel\include\Excel\ExcelEnvDef.h">
+    <ClInclude Include="..\..\..\sources\Excel\include\Excel\ExcelEnvDef.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\sources\Excel\include\Excel\ExcelFileFormat.h">
+    <ClInclude Include="..\..\..\sources\Excel\include\Excel\ExcelFileFormat.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\sources\Excel\include\Excel\OleExcel.h">
+    <ClInclude Include="..\..\..\sources\Excel\include\Excel\OleExcel.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\sources\Excel\include\Excel\oleTypeTraits.hpp">
+    <ClInclude Include="..\..\..\sources\Excel\include\Excel\oleTypeTraits.hpp">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

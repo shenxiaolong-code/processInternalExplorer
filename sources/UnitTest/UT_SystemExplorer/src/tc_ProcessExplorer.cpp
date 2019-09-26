@@ -38,7 +38,7 @@ namespace UnitTest
         PrintTestcase();
         ProcessFinder pf;
         std::vector<PROCESSENTRY32> ps;
-        pf.EnumRunningProcesses(ps);
+        pf.enumRunningProcesses(ps);
 
         ProcessInfoDisplayer pd(ps);
         pd.print();

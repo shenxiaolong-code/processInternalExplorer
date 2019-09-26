@@ -1,30 +1,39 @@
 #include <SystemExplorer/WindowExplorer.h>
 #include <MiniMPL/macro_assert.h>
 #include <MiniMPL/valueCompare.hpp>
+#include <MiniMPL/macro_class.h>
 
-#define ZeroArray(x)        ZeroMemory(x,sizeof(x))
-
-typedef struct _HwndPid
+//////////////////////////////////////////////////////////////////////////
+namespace 
 {
-    DWORD   dwPid;
-    HWND    hWnd;
-}HwndPid,*LPHwndPid;
+	struct HwndPid
+	{
+		DWORD   m_dwPid;
+		HWND    m_hWnd;
 
-BOOL CALLBACK LookupHwndProc(HWND Hwnd,LPARAM lParam)
-{
-    DWORD dwPid = 0;
-    GetWindowThreadProcessId(Hwnd,&dwPid);
-    LPHwndPid pHwndPid = (LPHwndPid)lParam;
-    if (dwPid == pHwndPid->dwPid)
-    {
-        pHwndPid->hWnd = Hwnd;
-        return FALSE;
-    }
-    return TRUE;
+		HwndPid() { ZeroThis(); }
+	};
+
+	BOOL CALLBACK EnumWindowsCallback(HWND Hwnd, LPARAM lParam)
+	{
+		DWORD dwPid = 0;
+		if (!GetWindowThreadProcessId(Hwnd, &dwPid))
+		{
+			return TRUE;	//continue to enumerate
+		}
+
+		HwndPid* pHwndPid = (HwndPid*)lParam;
+		if (dwPid == pHwndPid->m_dwPid)
+		{
+			pHwndPid->m_hWnd = Hwnd;
+			return FALSE;
+		}
+		return TRUE;
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-HWND WindowFinder::findWindowHwndByProcessID( DWORD dwPID )
+HWND WindowFinder::findMainHwndByPID( DWORD dwPID )
 {
     if (-1==dwPID)
     {
@@ -32,10 +41,10 @@ HWND WindowFinder::findWindowHwndByProcessID( DWORD dwPID )
     }
 
     HwndPid hp;
-    hp.dwPid = dwPID;
-    hp.hWnd = NULL;
-    EnumWindows(LookupHwndProc,(LPARAM)&hp);
-    return hp.hWnd;
+    hp.m_dwPid = dwPID;
+    hp.m_hWnd = NULL;
+    EnumWindows(EnumWindowsCallback,(LPARAM)&hp);
+    return hp.m_hWnd;
 }
 
 HWND WindowFinder::findWindowHwndByPoint( POINT pt,bool bChkTransparentWnd)
@@ -91,39 +100,44 @@ WindowExplorer::~WindowExplorer()
 
 }
 
-unsigned WindowExplorer::getAllChildWndsOfWnd( stlVector<SubWndInfo>& subChildWnds )
+unsigned WindowExplorer::getAllChildHwnd( stlVector<HWND>& subChildWnds )
 {
     CHECK_TRUE_ELSE_RETURN_VAL(isValid(),0);
 
-    stlChar szCharBuf[512]={0};
-
-    MiniMPL::CEqual eq;
     HWND hSubCtrl = GetWindow(m_hWnd,GW_HWNDFIRST);
     while (NULL != hSubCtrl)
     {
-        SubWndInfo  oInfo;
-        oInfo.m_hSubWnd = hSubCtrl;
-        GetWindowText(hSubCtrl,szCharBuf,sizeof(szCharBuf));
-        oInfo.m_szWindowTitle = szCharBuf;
-        ZeroArray(szCharBuf);
-
-        GetClassName(hSubCtrl,szCharBuf,sizeof(szCharBuf));
-        oInfo.m_szClassName = szCharBuf;
-        ZeroArray(szCharBuf);
-
-        if (eq(oInfo.m_szClassName,TXT("Edit"))   || 
-            eq(oInfo.m_szClassName,TXT("Static")) )
-        {				
-            SendMessage(hSubCtrl,WM_GETTEXT,sizeof(szCharBuf),(LPARAM)szCharBuf);
-            oInfo.m_szText = szCharBuf;
-            ZeroArray(szCharBuf);
-        }
-        if (eq(oInfo.m_szClassName,TXT("ComboBox"))) 
-        {
-        }
+		subChildWnds.push_back(hSubCtrl);
         hSubCtrl = GetWindow(hSubCtrl,GW_HWNDNEXT);
     }
     return subChildWnds.size();
+}
+
+bool WindowExplorer::getWindInfo(SubWndInfo& oInfo)
+{
+	oInfo.m_hSubWnd = m_hWnd;
+
+	stlChar szCharBuf[512] = { 0 };
+	GetWindowText(m_hWnd, szCharBuf, sizeof(szCharBuf));
+	oInfo.m_szWindowTitle = szCharBuf;
+	ZeroArray(szCharBuf);
+
+	GetClassName(m_hWnd, szCharBuf, sizeof(szCharBuf));
+	oInfo.m_szClassName = szCharBuf;
+	ZeroArray(szCharBuf);
+
+	MiniMPL::CEqual eq;
+	if (eq(oInfo.m_szClassName, TXT("Edit")) ||
+		eq(oInfo.m_szClassName, TXT("Static")))
+	{
+		SendMessage(m_hWnd, WM_GETTEXT, sizeof(szCharBuf), (LPARAM)szCharBuf);
+		oInfo.m_szText = szCharBuf;
+		ZeroArray(szCharBuf);
+	}
+	if (eq(oInfo.m_szClassName, TXT("ComboBox")))
+	{
+	}
+	return true;
 }
 
 bool WindowExplorer::getOverviewInfo( WndOverview& wi )

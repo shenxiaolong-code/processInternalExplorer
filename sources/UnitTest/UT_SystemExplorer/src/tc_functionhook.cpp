@@ -49,8 +49,9 @@ namespace UnitTest
 		UserFuncHook::ThunkType pThunk_user = ufh.hookUserFunc(oldFunc, newFunc);
 		hookApis.insert(std::make_pair(newFunc, getOldFunc(pThunk_user)));
 		oldFunc("call oldFunc after hook.\r\n");
-		ufh.restore(pThunk_user);
+		ufh.restoreHook(pThunk_user);
 		oldFunc("call oldFunc after store hook.\r\n");
+		hookApis.erase(newFunc);
     }
 
 	inline void TestCase_functionhook_exported()
@@ -67,10 +68,29 @@ namespace UnitTest
 		OutputDebugStringA("call OutputDebugStringA after hook.\r\n");
 		pe.restoreHook(pThunk_exported);
 		OutputDebugStringA("call OutputDebugStringA when restore hook.\r\n");
+		hookApis.erase(myOutputDebugStringA);
+	}
+
+	inline void TestCase_functionhook_MessageBoxA()
+	{
+		PrintTestcase();
+
+		using namespace Win_x86;
+		//test system exported API
+		OutputDebugStringA("call OutputDebugStringA before hook.\r\n");
+
+		CExportedFuncHook pe;
+		CExportedFuncHook::ThunkType pThunk_exported = pe.hookImportedAPI(OutputDebugStringA, myOutputDebugStringA);
+		hookApis.insert(std::make_pair(myOutputDebugStringA, getOldFunc(pThunk_exported)));
+		OutputDebugStringA("call OutputDebugStringA after hook.\r\n");
+		pe.restoreHook(pThunk_exported);
+		OutputDebugStringA("call OutputDebugStringA when restore hook.\r\n");
+		hookApis.erase(myOutputDebugStringA);
 	}
 
 #ifdef RUN_EXAMPLE_FUNCTIONHOOK
     InitRunFunc(TestCase_functionhook_exported);
+	//InitRunFunc(TestCase_functionhook_MessageBoxA);
 	InitRunFunc(TestCase_functionhook_user);
 #else //else of RUN_EXAMPLE_FUNCTIONHOOK
 

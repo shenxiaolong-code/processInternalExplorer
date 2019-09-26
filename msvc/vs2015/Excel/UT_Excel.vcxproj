@@ -11,8 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{E57FB11C-A4C5-4D4A-970D-D63A5013B7EC}</ProjectGuid>
-    <RootNamespace>UT_SystemExplorer</RootNamespace>
+    <ProjectGuid>{52EDA858-5B84-41A8-A973-BCA3255FB8AC}</ProjectGuid>
+    <RootNamespace>UT_Excel</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -32,11 +32,11 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="properties_sheet\UT_SystemExplorer.props" />
+    <Import Project="UT_Excel.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="properties_sheet\UT_SystemExplorer.props" />
+    <Import Project="UT_Excel.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -90,24 +90,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\sources\UnitTest\UT_SystemExplorer\src\tc_exceptionhelper.cpp" />
-    <ClCompile Include="..\..\..\sources\UnitTest\UT_SystemExplorer\src\tc_functionhook.cpp" />
-    <ClCompile Include="..\..\..\sources\UnitTest\UT_SystemExplorer\src\tc_functionhook_material.cpp" />
-    <ClCompile Include="..\..\..\sources\UnitTest\UT_SystemExplorer\src\tc_HoverWindowMonitor.cpp" />
-    <ClCompile Include="..\..\..\sources\UnitTest\UT_SystemExplorer\src\tc_PEFileExplorer.cpp" />
-    <ClCompile Include="..\..\..\sources\UnitTest\UT_SystemExplorer\src\tc_ProcessExplorer.cpp" />
-    <ClCompile Include="..\..\..\sources\UnitTest\UT_SystemExplorer\src\tc_StackExplorer.cpp" />
-    <ClCompile Include="..\..\..\sources\UnitTest\UT_SystemExplorer\src\tc_WindowExplorer.cpp" />
-    <ClCompile Include="..\..\..\sources\UnitTest\UT_SystemExplorer\UT_SystemExplorer.cpp" />
+    <ClCompile Include="..\..\..\sources\UnitTest\UT_Excel\src\tc_ExcelDataType.cpp" />
+    <ClCompile Include="..\..\..\sources\UnitTest\UT_Excel\src\tc_ExcelEnvDef.cpp" />
+    <ClCompile Include="..\..\..\sources\UnitTest\UT_Excel\src\tc_ExcelFileFormat.cpp" />
+    <ClCompile Include="..\..\..\sources\UnitTest\UT_Excel\src\tc_OleExcel.cpp" />
+    <ClCompile Include="..\..\..\sources\UnitTest\UT_Excel\src\tc_oleTypeTraits.cpp" />
+    <ClCompile Include="..\..\..\sources\UnitTest\UT_Excel\UT_Excel.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\sources\UnitTest\UT_SystemExplorer\src\tc_functionhook_material.h" />
-    <ClInclude Include="..\..\..\sources\UnitTest\UT_SystemExplorer\testconfig_SystemExplorer.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SystemExplorer.vcxproj">
-      <Project>{383b6936-a825-4d4a-ae0c-2e39641ccf5f}</Project>
-    </ProjectReference>
+    <ClInclude Include="..\..\..\sources\UnitTest\UT_Excel\testconfig_Excel.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

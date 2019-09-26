@@ -12,7 +12,7 @@
 #endif
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-unsigned ProcessFinder::EnumRunningProcesses( std::vector<DWORD>& rPIDs )
+unsigned ProcessFinder::enumRunningProcesses( std::vector<DWORD>& rPIDs )
 {
     DWORD aProcesses[1024]={0};
     DWORD pBytesReturned=0;
@@ -28,7 +28,7 @@ unsigned ProcessFinder::EnumRunningProcesses( std::vector<DWORD>& rPIDs )
     return rPIDs.size();
 }
 
-unsigned ProcessFinder::EnumRunningProcesses(std::vector<PROCESSENTRY32>& rProcess)
+unsigned ProcessFinder::enumRunningProcesses(std::vector<PROCESSENTRY32>& rProcess)
 {
     HANDLE hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
     if(hSnapShot == INVALID_HANDLE_VALUE)
@@ -54,7 +54,7 @@ unsigned ProcessFinder::EnumRunningProcesses(std::vector<PROCESSENTRY32>& rProce
     return rProcess.size();
 }
 
-bool ProcessFinder::findProcessByWnd( HWND hWnd,DWORD& dwPID )
+bool ProcessFinder::findProcessByHwnd( HWND hWnd,DWORD& dwPID )
 {
     CHECK_NULL_ELSE_RETURN_VAL(hWnd,false);
     return TRUE==GetWindowThreadProcessId(hWnd,&dwPID);
@@ -133,7 +133,7 @@ bool ProcessExplorer::getMemoryOfProcess(ProcessMemoryInfo& pmi )
 bool ProcessExplorer::closeProcess(bool bForce/*=false*/ )
 {
     WindowFinder wf;
-    HWND hwnd = wf.findWindowHwndByProcessID(m_processID);
+    HWND hwnd = wf.findMainHwndByPID(m_processID);
     if (!bForce && hwnd)
     {   //try to close application graceful
         return TRUE==PostMessage(hwnd,WM_QUIT,0,0);

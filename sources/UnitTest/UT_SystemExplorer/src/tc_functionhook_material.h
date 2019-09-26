@@ -7,6 +7,11 @@ typedef pOutputDebugStringA  TpOutputDebugStringA;
 void __stdcall myOutputDebugStringA(LPCSTR lpOutputString);
 
 //////////////////////////////////////////////////////////////////////////
+typedef int(__stdcall *pMessageBoxA) (HWND hWnd, LPCSTR lpText, LPCSTR lpCaption, UINT uType);
+typedef pMessageBoxA TpMessageBoxA;
+int __stdcall myMessageBoxA(HWND hWnd, LPCSTR lpText, LPCSTR lpCaption, UINT uType);
+
+//////////////////////////////////////////////////////////////////////////
 typedef bool(WINAPI *pUserFunc) (LPCSTR lpFileName);
 typedef pUserFunc TUserFunc;
 

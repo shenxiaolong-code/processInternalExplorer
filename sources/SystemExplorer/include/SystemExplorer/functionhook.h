@@ -47,7 +47,7 @@ namespace Win_x86
 			return hookUserFuncImpl(pOldFunc, pNewFunc);
 		}
 
-		bool restore(ThunkType pThunk);
+		bool restoreHook(ThunkType pThunk);
 
 	protected:
 		ThunkType hookUserFuncImpl(LPVOID pOldFunc, LPVOID pNewFunc);

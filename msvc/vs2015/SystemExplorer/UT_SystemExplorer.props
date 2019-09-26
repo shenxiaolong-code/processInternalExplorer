@@ -1,18 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets">
-    <Import Project="..\..\..\..\Core\msvc\vs2015\properties_sheet\project_setting\OsBase.props" />
+    <Import Project="..\UT_Feature.props" />
+    <Import Project="SystemExplorer.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>14.0.25431.1</_ProjectFileVersion>
   </PropertyGroup>
   <ItemDefinitionGroup>
+    <Link />
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\sources\SystemExplorer\include\;"$(CorePath)\sources\OsBase\include\";"$(CorePath)\sources\MiniMPL\include\"</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\sources\SystemExplorer\include;"$(CorePath)\sources\UnitTest\UnitTestKit\include\";%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>SystemExplorer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OsBase.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup />

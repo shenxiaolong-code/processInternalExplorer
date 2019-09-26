@@ -15,6 +15,29 @@ void __stdcall myOutputDebugStringA(LPCSTR lpOutputString)
 	pOld(ss.str().c_str());
 }
 
+int __stdcall myMessageBoxA(__in_opt HWND hWnd, __in_opt LPCSTR lpText, __in_opt LPCSTR lpCaption, __in UINT uType)
+{
+	std::stringstream ss;
+	ss << "myMessageBoxA: ready to call MessageBoxA" << lpText << "\r\n";
+	OutputDebugStringA(ss.str().c_str());
+
+	ss.str("");
+	ss << "old msg:" << lpText << "\r\n new msg : I am here\r\n";
+
+	std::map<PVOID, PVOID>::iterator it = hookApis.find(myMessageBoxA);
+	if (it != hookApis.end())
+	{
+		TpMessageBoxA pOld = (TpMessageBoxA)it->second;
+		pOld(hWnd, ss.str().c_str(), lpCaption, uType);
+	}
+
+	ss.str("");
+	ss << "myMessageBoxA: after calling MessageBoxA" << lpText << "\r\n";
+	OutputDebugStringA(ss.str().c_str());
+
+	return 0;
+}
+
 //////////////////////////////////////////////////////////////////////////
 bool WINAPI oldFunc(LPCSTR lpFileName)
 {
