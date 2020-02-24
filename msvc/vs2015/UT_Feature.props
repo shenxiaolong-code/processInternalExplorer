@@ -13,7 +13,7 @@
       <AdditionalIncludeDirectories>$(CorePath)\sources\OsBase\include\;$(CorePath)\sources\MiniMPL\include\;$(CorePath)\sources\UnitTest\UnitTestKit\include\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>MiniMPL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>MiniMPL.lib;UnitTestKit.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup />

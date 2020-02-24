@@ -15,6 +15,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SystemExplorer", "SystemExp
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UT_SystemExplorer", "SystemExplorer\UT_SystemExplorer.vcxproj", "{E57FB11C-A4C5-4D4A-970D-D63A5013B7EC}"
 	ProjectSection(ProjectDependencies) = postProject
+		{CA603705-C41E-4248-A3E0-C5960721F591} = {CA603705-C41E-4248-A3E0-C5960721F591}
 		{ABACD80F-2804-471C-9A98-E433C33FCA85} = {ABACD80F-2804-471C-9A98-E433C33FCA85}
 		{383B6936-A825-4D4A-AE0C-2E39641CCF5F} = {383B6936-A825-4D4A-AE0C-2E39641CCF5F}
 	EndProjectSection
@@ -30,6 +31,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OsBase", "..\..\..\Core\msvc\vs2015\OsBase\OsBase.vcxproj", "{CA603705-C41E-4248-A3E0-C5960721F591}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTestKit", "..\..\..\Core\msvc\vs2015\UnitTestKit\UnitTestKit.vcxproj", "{ABACD80F-2804-471C-9A98-E433C33FCA85}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9B6AEEFB-62C0-4A1D-B771-2CBAC43C652A} = {9B6AEEFB-62C0-4A1D-B771-2CBAC43C652A}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

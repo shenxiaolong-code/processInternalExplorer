@@ -6,11 +6,11 @@
 //////////////////////////////////////////////////////////////////////////
 namespace Win_x86
 {
-	struct HookedFuncThunk : public FuncThunk
+	struct ExportedFuncThunk : public FuncThunk
 	{
-		HookedFuncThunk()
+		ExportedFuncThunk()
 		{
-			ZeroMemory(((FuncThunk*)this) + 1, offsetof(HookedFuncThunk, m_pNewFuncName) - sizeof(FuncThunk));
+			ZeroMemory(((FuncThunk*)this) + 1, offsetof(ExportedFuncThunk, m_pNewFuncName) - sizeof(FuncThunk));
 		}
 		DWORD           m_pNewFuncAddr;
 
@@ -18,7 +18,7 @@ namespace Win_x86
 		std::string     m_pNewFuncModuleName;
 	};
 
-	FARPROC getOldFunc(HookedFuncThunkPtr pThunk)
+	FARPROC getOldFunc(ExportedFuncThunkPtr pThunk)
 	{
 		if (pThunk)
 		{
@@ -35,7 +35,7 @@ namespace Win_x86
 	CExportedFuncHook::ThunkType CExportedFuncHook::hookImportedAPIImpl(DWORD pOldApi, DWORD pNewApi)
 	{
 		CExportedFuncHook::ThunkType pThunk = _sharedPtrGenerater;
-		HookedFuncThunk& rFuncThunk = *pThunk;
+		ExportedFuncThunk& rFuncThunk = *pThunk;
 		if (getImportedAPIThunk(pOldApi, rFuncThunk))
 		{
 			rFuncThunk.m_pNewFuncAddr = pNewApi;
@@ -54,7 +54,7 @@ namespace Win_x86
 	{		
 		if (pThunk)
 		{
-			HookedFuncThunk& rThunk = *pThunk;
+			ExportedFuncThunk& rThunk = *pThunk;
 			DWORD* pInstr = (DWORD*)rThunk.m_instructionAddr;
 			InstructionRWGuard iw(GetCurrentProcessId(), pInstr, sizeof(rThunk.m_instructionAddr));
 			if (iw)

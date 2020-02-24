@@ -13,7 +13,7 @@
     </ClCompile>
     <Link />
     <Link>
-      <AdditionalDependencies>Excel.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup />

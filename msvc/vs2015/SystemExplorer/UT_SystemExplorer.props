@@ -14,7 +14,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\sources\SystemExplorer\include;"$(CorePath)\sources\UnitTest\UnitTestKit\include\";%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>OsBase.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OsBase.lib;SystemExplorer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup />

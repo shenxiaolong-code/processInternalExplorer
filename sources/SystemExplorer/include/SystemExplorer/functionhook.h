@@ -14,14 +14,14 @@
 
 namespace Win_x86
 {
-	struct HookedFuncThunk;
-	DECLARE_PTR(HookedFuncThunk);
-	FARPROC getOldFunc(HookedFuncThunkPtr pThunk);
+	struct ExportedFuncThunk;
+	DECLARE_PTR(ExportedFuncThunk);
+	FARPROC getOldFunc(ExportedFuncThunkPtr pThunk);
 
 	class CExportedFuncHook : public PEFileExplorer
 	{
 	public:
-		typedef HookedFuncThunkPtr		ThunkType;
+		typedef ExportedFuncThunkPtr		ThunkType;
 		
 		template<typename TF> ThunkType hookImportedAPI(TF pOldApi, TF pNewApi)
 		{

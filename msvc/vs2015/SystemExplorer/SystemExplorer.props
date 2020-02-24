@@ -12,7 +12,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\sources\SystemExplorer\include\;"$(CorePath)\sources\OsBase\include\";"$(CorePath)\sources\MiniMPL\include\"</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>SystemExplorer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup />
