@@ -3,12 +3,17 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
     <CorePath>$(SolutionDir)..\..\..\Core</CorePath>
+    <FeaturesPath>$(SolutionDir)..\..\..\Features</FeaturesPath>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup />
   <ItemGroup>
     <BuildMacro Include="CorePath">
       <Value>$(CorePath)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="FeaturesPath">
+      <Value>$(FeaturesPath)</Value>
       <EnvironmentVariable>true</EnvironmentVariable>
     </BuildMacro>
   </ItemGroup>

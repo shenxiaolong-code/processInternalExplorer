@@ -9,9 +9,7 @@
     <_ProjectFileVersion>14.0.25431.1</_ProjectFileVersion>
   </PropertyGroup>
   <ItemDefinitionGroup>
-    <ClCompile>
-      <AdditionalIncludeDirectories>$(CorePath)\sources\OsBase\include\;$(CorePath)\sources\MiniMPL\include\;$(CorePath)\sources\UnitTest\UnitTestKit\include\</AdditionalIncludeDirectories>
-    </ClCompile>
+    <ClCompile />
     <Link>
       <AdditionalDependencies>MiniMPL.lib;UnitTestKit.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>

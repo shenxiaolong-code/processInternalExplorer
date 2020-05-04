@@ -9,7 +9,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\sources\Excel\include\;$(CorePath)\sources\MiniMPL\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(FeaturesPath)\sources\Excel\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link />
     <Link>

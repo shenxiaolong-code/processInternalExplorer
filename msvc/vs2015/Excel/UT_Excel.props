@@ -10,9 +10,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Link />
-    <ClCompile>
-      <AdditionalIncludeDirectories>$(CorePath)\sources\UnitTest\UnitTestKit\include\;$(ProjectDir)..\..\..\sources\Excel\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ClCompile>
+    <ClCompile />
     <Link>
       <AdditionalDependencies>Excel.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>

@@ -382,6 +382,9 @@ bool DumpGenerater::prepareCapture(bool bPrepare)
 	}
 }
 
+
+
+
 void DumpGenerater::WriteDump(char const* pFileFullPath, PEXCEPTION_POINTERS pExceptionInfo, bool bFullDump/*=true*/)
 {
 	if (INVALID_HANDLE_VALUE == m_hProcess)
@@ -439,14 +442,21 @@ void DumpGenerater::WriteDump(char const* pFileFullPath, PEXCEPTION_POINTERS pEx
 	}
 
 	SetLastError(0L);
-	MINIDUMP_TYPE mt = MiniDumpNormal;	//mini dump
-	if (bFullDump)
+	
+	//https://www.cnblogs.com/lidabo/p/3635960.html
+	enum DumpSize {TinyDump,MiniDump,MidiDump,MaxiDump};
+	static const MINIDUMP_TYPE mts[] =
 	{
-		mt = MINIDUMP_TYPE(MiniDumpWithFullMemory | MiniDumpWithFullMemoryInfo
-			| MiniDumpWithHandleData | MiniDumpWithUnloadedModules | MiniDumpWithThreadInfo);
-	}
+		MINIDUMP_TYPE(MiniDumpNormal),
+		MINIDUMP_TYPE(MiniDumpWithIndirectlyReferencedMemory | MiniDumpScanMemory),
+		MINIDUMP_TYPE(MiniDumpWithPrivateReadWriteMemory | MiniDumpWithDataSegs | MiniDumpWithHandleData | MiniDumpWithFullMemoryInfo | MiniDumpWithThreadInfo | MiniDumpWithUnloadedModules),
+		MINIDUMP_TYPE(MiniDumpWithFullMemory | MiniDumpWithFullMemoryInfo | MiniDumpWithHandleData | MiniDumpWithThreadInfo | MiniDumpWithUnloadedModules | MiniDumpIgnoreInaccessibleMemory)
+		//MiniDumpIgnoreInaccessibleMemory will ignore memory access failure to continue to generate full dump file. avoid error code 0x8007012b for MiniDumpWriteDump.(google)
+		//https://docs.microsoft.com/en-us/windows/win32/api/minidumpapiset/ne-minidumpapiset-minidump_type
+	};	
+	MINIDUMP_TYPE mt = mts[bFullDump ? MaxiDump : MiniDump];
 	if (!MiniDumpWriteDump(m_hProcess, m_processId, hFile, mt, &minidump_exception, NULL, NULL))
-	{
+	{	//see mark in #pragma comment(lib,"Dbghelp.lib") 
 		outputTxtV("MiniDumpWriteDump -FAILED (LastError:%u)\n", GetLastError());
 	}
 	FlushFileBuffers(hFile);
