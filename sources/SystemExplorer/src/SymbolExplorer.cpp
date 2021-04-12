@@ -1,15 +1,18 @@
-#include <SystemExplorer/StackExplorer.h>
+#include <SystemExplorer/SymbolExplorer.h>
 
 #ifdef MSVC
 
 #include <Psapi.h>
-#include <MiniMPL/fromToString.hpp>
 #include <MiniMPL/macro_assert.h>
 #include <win32/WinApiPack.h>
+#include <map>
+#include <MiniMPL/stdwrapper.hpp>
 
 #pragma comment(lib,"Psapi")
 #pragma comment(lib,"Dbghelp")
-#pragma comment(lib,"Version")  // for "VerQueryValue"
+#pragma comment(lib,"Version")              // for "VerQueryValue"
+#pragma comment(lib, "comsuppw.lib")        //for _bstr_t string
+
 
 #pragma region symbolAW
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -32,7 +35,7 @@
     #define my_VerQueryValue			VerQueryValueW
 #else
     typedef IMAGEHLP_MODULE64           TIMAGEHLP_MODULE64;
-    typedef SYMBOL_INFO                 TSYMBOL_INFO;  
+    typedef SYMBOL_INFO                 TSYMBOL_INFO;
 
     typedef IMAGEHLP_LINE64             TIMAGEHLP_LINE;
     #define my_SymGetLineFromAddr       SymGetLineFromAddr64
@@ -50,6 +53,42 @@
 
 #include "getCurContext.c"
 #pragma endregion symbolAW
+//////////////////////////////////////////////Init symbols //////////////////////////////////////////////////////////////
+struct SymbolEnvironment
+{
+    SymbolEnvironment(HANDLE  hProcess) : m_hProcess(hProcess) 
+    {
+        SymSetOptions(SymGetOptions() | SYMOPT_FAIL_CRITICAL_ERRORS | SYMOPT_LOAD_LINES);
+        m_bSymInited = SymInitialize(m_hProcess, NULL, TRUE);
+        if (!m_bSymInited)
+        {
+            m_lastErrorCode = GetLastError();
+        }
+    };
+    ~SymbolEnvironment()
+    {
+        if (m_bSymInited)
+        {
+            SymCleanup(m_hProcess);
+        }        
+    }
+    operator bool()
+    {
+        return m_bSymInited;
+    }
+
+    BOOL    m_bSymInited    = FALSE;
+    HANDLE  m_hProcess      = NULL;
+    DWORD   m_lastErrorCode = S_OK;
+};
+enum class __scrt_native_startup_state;
+extern "C" extern __scrt_native_startup_state __scrt_current_native_startup_state;
+bool isGlobalInitState()
+{
+    // 2: __scrt_native_startup_state::initialized
+    return 2 != int(__scrt_current_native_startup_state);
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename TObj,typename TParam>
 struct TThrdCallParam 
@@ -60,77 +99,80 @@ struct TThrdCallParam
     TThrdCallParam(TObj& rCaller,TParam& rParam): m_rCaller(rCaller), m_rParam(rParam) {}
 };
 
-BOOL CALLBACK SymEnumerateModulesProc64(IN PCSTR ModuleName, IN DWORD64 BaseOfDll,  IN PVOID UserContext )
+BOOL CALLBACK SymEnumerateModules64_callback(IN PCSTR ModuleName, IN DWORD64 BaseOfDll,  IN PVOID UserContext )
 {
-    TThrdCallParam<StackExplorer,stlVector<ModInfo> >* pTypeParam = (TThrdCallParam<StackExplorer,stlVector<ModInfo> >*)UserContext;
+    TThrdCallParam<SymbolExplorer,stlVector<ModInfo> >* pTypeParam = (TThrdCallParam<SymbolExplorer,stlVector<ModInfo> >*)UserContext;
     ASSERT_AND_LOG(pTypeParam);
 
     ModInfo mi;
-    pTypeParam->m_rCaller.resloveModuleInfo(PVOID(BaseOfDll),mi);
+    pTypeParam->m_rCaller.resloveModuleSymbol(PVOID(BaseOfDll),mi);
     pTypeParam->m_rParam.push_back(mi);
     return TRUE;
 }
 
-BOOL CALLBACK EnumSymProc(PSYMBOL_INFO pSymInfo,ULONG SymbolSize,PVOID   UserContext)
+BOOL CALLBACK SymEnumSymbols_callback(PSYMBOL_INFO pSymInfo,ULONG SymbolSize,PVOID   UserContext)
 {
-    stlVector<MOD_SYMBOL_INFO>*  pSV = (stlVector<MOD_SYMBOL_INFO>*)UserContext;
-    MOD_SYMBOL_INFO rSi;
+    stlVector<STD_SYMBOL_INFO>*  pSV = (stlVector<STD_SYMBOL_INFO>*)UserContext;
+    STD_SYMBOL_INFO rSi;
     rSi = *pSymInfo;
     pSV->push_back(rSi);
     return TRUE;
 }
-
-//////////////////////////////////////////////Init symbols //////////////////////////////////////////////////////////////
-BOOL    g_bSymInited    = FALSE;
-HANDLE  gs_hProcess     = NULL;
-
-void __cdecl symClean()
-{
-    SymCleanup(gs_hProcess);
-}
-
-void __cdecl symInit()
-{
-    SymSetOptions(SymGetOptions() | SYMOPT_FAIL_CRITICAL_ERRORS | SYMOPT_LOAD_LINES );
-    gs_hProcess = GetCurrentProcess();
-    g_bSymInited  = SymInitialize(gs_hProcess, NULL, TRUE);
-
-    atexit(symClean);
-}
-
-#define SECNAME ".CRT$XCA"
-#pragma section(SECNAME,long, read) 
-typedef void (__cdecl *_PVFV)();
-__declspec(allocate(SECNAME)) _PVFV dummy[] = { symInit };
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-StackExplorer::StackExplorer(HANDLE  hProcess)
-: m_hProcess(hProcess)
+std::map<HANDLE, SymbolEnvironmentWptr>  SymbolExplorer::gs_processSymbolMap;
+SymbolExplorer::SymbolExplorer(_In_ HANDLE hProcess /*= GetCurrentProcess()*/)
+    : m_hProcess(hProcess)
 {
-    if (!g_bSymInited)
-    {
-        symInit();
-    }
+    m_symEnv = symInitWithProcess(m_hProcess);
 }
 
-BOOL StackExplorer::resloveAddrInfo( _In_ PVOID addr, _Inout_ AddressInfo& addrInfo )
+SymbolExplorer::~SymbolExplorer()
 {
-    if (!g_bSymInited)
+}
+
+BOOL SymbolExplorer::resloveAddrSymbol_raw(_In_ PVOID addr, _Inout_ STD_SYMBOL_INFO& addrSymbol)
+{  
+    if (isSymbolReady())
+    {
+        return FALSE;
+    }
+
+    DWORD64 asmDisplacement = 0;
+    ULONG64 buffer[(sizeof(TSYMBOL_INFO) + MAX_SYM_NAME * sizeof(TCHAR) + sizeof(ULONG64) - 1) / sizeof(ULONG64)] = {0};
+    TSYMBOL_INFO* pSymbol = (TSYMBOL_INFO*)buffer;
+    pSymbol->SizeOfStruct = sizeof(TSYMBOL_INFO);
+    pSymbol->MaxNameLen = MAX_SYM_NAME;
+
+    if (my_SymFromAddr(m_hProcess, DWORD64(addr), &asmDisplacement, pSymbol))
+    {
+        addrSymbol = *pSymbol;
+        addrSymbol.asmOffset = asmDisplacement;
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+BOOL SymbolExplorer::resloveAddrSymbol( _In_ PVOID addr, _Inout_ AddressInfo& addrInfo )
+{
+    if (isSymbolReady())
     {
         return FALSE;
     }
 
     memset(&addrInfo,0,sizeof(AddressInfo));
     addrInfo.m_addr             = addr;
-    resloveModuleInfo(addr,addrInfo.m_mod);    
-    resloveFuncInfo(addr,addrInfo.m_func);    
-    resloveSourceInfo(addr,addrInfo.m_fileName,addrInfo.m_lineNumber);
+    resloveModuleSymbol(addr,addrInfo.m_mod);    
+    resloveFuncSymbol(addr,addrInfo.m_func);   
+    stlString fileName;
+    resloveSourceSymbol(addr, fileName,addrInfo.m_lineNumber);
+    addrInfo.m_fileName = fileName.c_str();
     return TRUE;
 }
 
-BOOL StackExplorer::resloveModuleInfo( _In_ PVOID addr, _Inout_ ModInfo& modInfo )
+BOOL SymbolExplorer::resloveModuleSymbol( _In_ PVOID addr, _Inout_ ModInfo& modInfo )
 {
-    if (!g_bSymInited)
+    if (isSymbolReady())
     {
         return FALSE;
     }
@@ -148,14 +190,14 @@ BOOL StackExplorer::resloveModuleInfo( _In_ PVOID addr, _Inout_ ModInfo& modInfo
         im.SizeOfStruct = sizeof(im);
         if (!my_SymGetModuleInfo64(m_hProcess,DWORD64(addr),&im))
         {
-            StackInfoDisplayer sid;
+            SymbolInfoDisplayer sid;
             sid.printErrorCode(GetLastError());
         }
         modInfo.m_timeDateStamp = im.TimeDateStamp;
         modInfo.m_checkSum      = im.CheckSum;
         modInfo.m_numSyms       = im.NumSyms;
         modInfo.m_symType       = im.SymType;
-        modInfo.m_pdbFile       = MiniMPL::toString(im.CVData);
+        modInfo.m_pdbFile       = im.CVData;
 
         MODULEINFO mi;
         if (GetModuleInformation(m_hProcess,HMODULE(mbi.AllocationBase),&mi,sizeof(MODULEINFO)))
@@ -165,7 +207,7 @@ BOOL StackExplorer::resloveModuleInfo( _In_ PVOID addr, _Inout_ ModInfo& modInfo
             if (modInfo.m_entryPoint != addr)  //avoid fall in loop
             {
                 FuncInfo fi;
-                resloveFuncInfo(modInfo.m_entryPoint,fi);
+                resloveFuncSymbol(modInfo.m_entryPoint,fi);
                 modInfo.m_entryName = fi.m_name;
             }
         }
@@ -178,11 +220,11 @@ BOOL StackExplorer::resloveModuleInfo( _In_ PVOID addr, _Inout_ ModInfo& modInfo
         modInfo.m_modHandle  = my_GetModuleHandle(buf256);
 
         DWORD dwHandle=0;
-        int versionSize = my_GetFileVersionInfoSize(modInfo.m_name.c_str(),&dwHandle);
+        int versionSize = my_GetFileVersionInfoSize(modInfo.m_name,&dwHandle);
         if (versionSize)
         {
             stlVector<unsigned char>    buf(versionSize);
-            my_GetFileVersionInfo(modInfo.m_name.c_str(),DWORD(modInfo.m_modHandle),buf.size(),&*buf.begin());
+            my_GetFileVersionInfo(modInfo.m_name,DWORD(modInfo.m_modHandle),buf.size(),&*buf.begin());
 
             UINT len=0;
             VS_FIXEDFILEINFO *fInfo = NULL;
@@ -198,27 +240,23 @@ BOOL StackExplorer::resloveModuleInfo( _In_ PVOID addr, _Inout_ ModInfo& modInfo
     return FALSE;
 }
 
-BOOL StackExplorer::resloveFuncInfo( _In_ PVOID addr, _Inout_ FuncInfo& funcInfo )
+BOOL SymbolExplorer::resloveFuncSymbol( _In_ PVOID addr, _Inout_ FuncInfo& funcInfo )
 {
-    if (!g_bSymInited)
+    if (isSymbolReady())
     {
         return FALSE;
     }
 
-    DWORD64 asmDisplacement;
-    ULONG64 buffer[(sizeof(TSYMBOL_INFO)+MAX_SYM_NAME*sizeof(TCHAR)+sizeof(ULONG64)-1)/sizeof(ULONG64)];
-    TSYMBOL_INFO* pSymbol = (TSYMBOL_INFO*)buffer;
-    pSymbol->SizeOfStruct = sizeof(TSYMBOL_INFO);
-    pSymbol->MaxNameLen = MAX_SYM_NAME; 
-
-    if (my_SymFromAddr(m_hProcess,DWORD64(addr),&asmDisplacement,pSymbol))
+    STD_SYMBOL_INFO addrSymbol;
+    if (resloveAddrSymbol_raw(addr,addrSymbol))
     {
-        funcInfo.m_addr  = PVOID(pSymbol->Address);
-        funcInfo.m_name  = pSymbol->Name;               //UnDecorateSymbolName
-        funcInfo.m_AsmOffset= DWORD(asmDisplacement);
+        funcInfo.m_addr         = PVOID(addrSymbol.Address);
+        funcInfo.m_name         = addrSymbol.name;      //UnDecorateSymbolName
+        funcInfo.m_asmOffset    = addrSymbol.asmOffset;
 
         stlChar undName[256]={0};
-        my_UnDecorateSymbolName(pSymbol->Name,undName,ARRAYSIZE(undName),UNDNAME_NAME_ONLY);
+        stlString stdName = addrSymbol.name;
+        my_UnDecorateSymbolName(stdName.c_str(),undName,ARRAYSIZE(undName),UNDNAME_NAME_ONLY);
         funcInfo.m_unDecorateName = undName;
         return TRUE;
     }
@@ -226,11 +264,11 @@ BOOL StackExplorer::resloveFuncInfo( _In_ PVOID addr, _Inout_ FuncInfo& funcInfo
     return FALSE;
 }
 
-BOOL StackExplorer::resloveSourceInfo(_In_ PVOID addr, _Inout_ stlString& fileName, _Inout_ DWORD& lineNumber)
+BOOL SymbolExplorer::resloveSourceSymbol(_In_ PVOID addr, _Inout_ stlString& fileName, _Inout_ DWORD& lineNumber)
 {
     fileName    = TXT("");
     lineNumber  = -1;
-    if (!g_bSymInited)
+    if (isSymbolReady())
     {
         return FALSE;
     }
@@ -247,11 +285,113 @@ BOOL StackExplorer::resloveSourceInfo(_In_ PVOID addr, _Inout_ stlString& fileNa
 
     return FALSE;
 }
+       
+BOOL SymbolExplorer::resloveSymbolFromName(const char* szSymbolName, _Inout_ STD_SYMBOL_INFO& nameInfo)
+{   //e.g. : resloveSymbolFromName("BaseThreadInitThunk");	
+    if (isSymbolReady())
+    {
+        return FALSE;
+    }
 
-BOOL StackExplorer::resloveLoadedModules(_Inout_ stlVector<ModInfo>& modules)
+    ULONG64 buffer[(sizeof(SYMBOL_INFO) + MAX_SYM_NAME * sizeof(TCHAR) + sizeof(ULONG64) - 1) / sizeof(ULONG64)] = { 0 };
+    PSYMBOL_INFO pSymbol = (PSYMBOL_INFO)buffer;
+    pSymbol->SizeOfStruct = sizeof(SYMBOL_INFO);
+    pSymbol->MaxNameLen = MAX_SYM_NAME;
+    if (SymFromName(m_hProcess, szSymbolName, pSymbol))
+    { //https://docs.microsoft.com/en-us/windows/win32/debug/retrieving-symbol-information-by-name
+        nameInfo = *pSymbol;
+        return TRUE;
+    }
+    return FALSE;
+}
+
+BOOL SymbolExplorer::resloveUnDecorateSymbolName(const char* szSymbolName, _Inout_ stlString& rawSymbolName)
 {
-    TThrdCallParam<StackExplorer,stlVector<ModInfo> > rParam(*this,modules);
-    return SymEnumerateModules64(m_hProcess,SymEnumerateModulesProc64,&rParam);
+    STD_SYMBOL_INFO ssi;
+    if (resloveSymbolFromName(szSymbolName,ssi))
+    {  
+        TCHAR szUndName[256] = { 0 };
+        stlString stlName = ssi.name;
+        if (my_UnDecorateSymbolName(stlName.c_str(), szUndName, sizeof(szUndName), UNDNAME_COMPLETE))
+        {
+            rawSymbolName = szUndName;
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+BOOL SymbolExplorer::resloveLoadedModules(_Inout_ stlVector<ModInfo>& modules)
+{
+    if (isSymbolReady())
+    {
+        return FALSE;
+    }
+
+    TThrdCallParam<SymbolExplorer,stlVector<ModInfo> > rParam(*this,modules);
+    return SymEnumerateModules64(m_hProcess,SymEnumerateModules64_callback,&rParam);
+}
+
+SymbolEnvironmentWptr       gs_thisProcSymInitWptr;
+SymbolEnvironmentPtr SymbolExplorer::symInitWithProcess(HANDLE hProcess)
+{
+    if (isGlobalInitState())
+    {   //before main function, std lib is not initialized. so std object is not used.
+        SymbolEnvironmentPtr pEvn = gs_thisProcSymInitWptr.lock();
+        if (pEvn)
+        {  
+            return pEvn;
+        }
+        else
+        { 
+            SymbolEnvironmentPtr pEvn = _sharedPtrGenerater(hProcess);
+            gs_thisProcSymInitWptr = pEvn;
+            return pEvn;
+        }        
+    }
+
+    auto pEnv = StackExplorer::gs_processSymbolMap.find(hProcess);
+    if (StackExplorer::gs_processSymbolMap.end() == pEnv || !pEnv->second.lock())
+    {
+        SymbolEnvironmentPtr pEvn = _sharedPtrGenerater(hProcess);
+        if (pEvn && *pEvn)
+        {
+            gs_processSymbolMap.emplace(hProcess, pEvn);
+            return pEvn;
+        }
+        else
+        {
+            return nullptr;
+        }
+    }
+    else
+    {
+        return pEnv->second.lock();
+    }
+}
+
+bool SymbolExplorer::isSymbolReady()
+{   
+    return m_symEnv && !*m_symEnv;
+}
+
+BOOL SymbolExplorer::enumModuleSymbols(_In_ stlStringA const& modName, _Inout_ stlVector<STD_SYMBOL_INFO>& syms, const char* pMask/*="*!*"*/)
+{
+    //PLOADED_IMAGE	ploadImage = ImageLoad(modName, NULL);
+    //intptr_t      BaseOfDll  = SymLoadModule(m_hProcess, ploadImage->hFile, modName, pdbName, 0, ploadImage->SizeOfImage);
+    //e.g. : SymLoadModule(,,"win32k.sys", "win32k.pdb", 0, ploadImage->SizeOfImage)    
+
+    DWORD64 BaseOfDll = SymLoadModule64(m_hProcess,NULL,modName.c_str(),NULL,0,0);
+    SymEnumSymbols(m_hProcess, BaseOfDll, pMask, SymEnumSymbols_callback, &syms);
+    SymUnloadModule64(m_hProcess, BaseOfDll);
+    //ImageUnload(ploadImage);
+    return syms.size()>0;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+StackExplorer::StackExplorer(HANDLE  hProcess)
+: SymbolExplorer(hProcess)
+{
+    
 }
 
 #pragma optimize( "", off )
@@ -278,20 +418,12 @@ endloop:
 }
 #pragma optimize( "", on )
 
-BOOL StackExplorer::enumModuleSyms( _In_ stlStringA const& modName,_Inout_ stlVector<MOD_SYMBOL_INFO>& syms )
-{
-    DWORD64 BaseOfDll = SymLoadModule64(m_hProcess,NULL,modName.c_str(),NULL,0,0);
-    SymEnumSymbols(m_hProcess, BaseOfDll, NULL, EnumSymProc, &syms);
-    SymUnloadModule64(m_hProcess, BaseOfDll);
-    return syms.size()>0;
-}
-
 #pragma optimize("", on)     //resolve warning C4748
 BOOL StackExplorer::resloveStacks( _Inout_ CallStackS& rStacks,_In_ HANDLE hThread /*= GetCurrentThread()*/,_In_ CONTEXT* pThrdContext/*=NULL*/ )
 {
     //refer to : .\VC\atlmfc\include\atlutil.h
     //ATL::_AtlThreadContextInfo::DoDumpStack
-    if (!g_bSymInited)
+    if (isSymbolReady())
     {
         return FALSE;
     }
@@ -344,22 +476,22 @@ BOOL StackExplorer::resloveStacks( _Inout_ CallStackS& rStacks,_In_ HANDLE hThre
         {
             CallStack   sk;            
             FuncInfo    fi;
-            if (resloveFuncInfo(PVOID(stackFrame.AddrPC.Offset),fi))
+            if (resloveFuncSymbol(PVOID(stackFrame.AddrPC.Offset),fi))
             {
                 sk.m_funcAddr   = fi.m_addr;
                 sk.m_funcName   = fi.m_name;
-                sk.m_AsmOffset     = fi.m_AsmOffset;
+                sk.m_asmOffset     = fi.m_asmOffset;
             }
 
             Static_Assert(sizeof(sk.m_lineNumber)>=sizeof(DWORD));
-            resloveSourceInfo(PVOID(stackFrame.AddrPC.Offset),sk.m_srcFileName,(DWORD&)sk.m_lineNumber);
-            if (1)
+            stlString srcFileName;
+            if (resloveSourceSymbol(PVOID(stackFrame.AddrPC.Offset), srcFileName, sk.m_lineNumber))
             {
-                //outputTxtV(TXT("%s(%d) :%s\n"),sk.m_srcFileName.c_str(),sk.m_lineNumber,sk.m_funcName.c_str());
-            }
-
+                sk.m_srcFileName = srcFileName.c_str();
+            } 
             if (0 != sk.m_funcAddr)
             {
+                
                 rStacks.m_stacks.push_back(sk);
             }
         }
@@ -374,7 +506,7 @@ BOOL StackExplorer::resloveStacks( _Inout_ CallStackS& rStacks,_In_ HANDLE hThre
 
 void handleException(_In_ _EXCEPTION_POINTERS * pExp )
 {
-    StackInfoDisplayer sid;
+    SymbolInfoDisplayer sid;
     sid.printExceptStack(*pExp->ExceptionRecord);
 
     using namespace std;
@@ -384,7 +516,7 @@ void handleException(_In_ _EXCEPTION_POINTERS * pExp )
     sid.print(modules);
     
     AddressInfo ai;
-    se.resloveAddrInfo(pExp->ExceptionRecord->ExceptionAddress,ai);
+    se.resloveAddrSymbol(pExp->ExceptionRecord->ExceptionAddress,ai);
     sid.printExceptSummary(*pExp->ExceptionRecord,ai);
     sid.print(ai);
 

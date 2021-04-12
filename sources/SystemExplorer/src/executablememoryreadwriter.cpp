@@ -2,11 +2,13 @@
 
 namespace Win_x86
 {
-	InstructionRWGuard::InstructionRWGuard(DWORD dwProcessId, LPVOID lpAddress, SIZE_T isize, DWORD flNewProtect /*= PAGE_READWRITE*/) : m_status(false), m_lpAddress(lpAddress), m_size(isize), m_flNewProtect(flNewProtect)
+	InstructionRWGuard::InstructionRWGuard(DWORD dwProcessId, LPVOID lpAddress, SIZE_T isize, DWORD flNewProtect /*= PAGE_EXECUTE_READWRITE*/) 
+        : m_status(false), m_lpAddress(lpAddress), m_size(isize), m_flNewProtect(flNewProtect), m_flOldProtect(m_flNewProtect)
 	{
-		m_hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessId);
-		if (INVALID_HANDLE_VALUE != m_hProcess)
-		{//write new protect flag and backup old protect value
+		m_hProcess  = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessId);
+        m_status    = INVALID_HANDLE_VALUE != m_hProcess;
+		if (m_status && IsProcessorFeaturePresent(PF_NX_ENABLED))
+		{//write new memory access protection flag and backup old protect value            
 			m_status = TRUE == VirtualProtectEx(m_hProcess, m_lpAddress, m_size, m_flNewProtect, &m_flOldProtect);
 		}
 	}
@@ -20,7 +22,13 @@ namespace Win_x86
 	{
 		if (INVALID_HANDLE_VALUE != m_hProcess)
 		{
-			if (m_flOldProtect != m_flNewProtect)
+/*
+            #define PAGE_EXECUTE            0x10    
+            #define PAGE_EXECUTE_READ       0x20    
+            #define PAGE_EXECUTE_READWRITE  0x40    
+            #define PAGE_EXECUTE_WRITECOPY  0x80
+*/
+            if ((m_flOldProtect != m_flNewProtect) && (m_flOldProtect & 0xF0) && IsProcessorFeaturePresent(PF_NX_ENABLED))
 			{//write back old protect flag
 				VirtualProtectEx(m_hProcess, m_lpAddress, m_size, m_flOldProtect, &m_flOldProtect);
 			}

@@ -1,4 +1,4 @@
-#include <SystemExplorer/StackExplorer.h>
+#include <SystemExplorer/SymbolExplorer.h>
 #ifdef MSVC
 
 #include <MiniMPL/productSpecialDef.h>
@@ -79,7 +79,7 @@ stlString timeDateStamp2Str( DWORD tds,int alignLen/*=0*/ )
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void StackInfoDisplayer::print( CallStackS const& cs )
+void SymbolInfoDisplayer::print( CallStackS const& cs )
 {
     using namespace std;
     outputTxt ((TXT("\n********************************************************************************************\n")))    ;
@@ -92,21 +92,21 @@ void StackInfoDisplayer::print( CallStackS const& cs )
     }
 }
 
-void StackInfoDisplayer::print( _In_ CallStack const& sk)
+void SymbolInfoDisplayer::print( _In_ CallStack const& sk)
 {
     using namespace std;
     if (sk.m_funcAddr)
     {
-        outputTxtV(TXT("0X%p\t0X%p\t\t%s\n"),sk.m_funcAddr,sk.m_AsmOffset,sk.m_funcName.c_str());
+        outputTxtV(TXT("0X%p\t0X%p\t\t%s\n"),sk.m_funcAddr,sk.m_asmOffset,(TCHAR*)sk.m_funcName);
     }
 
-    if (0 != sk.m_srcFileName.size())
+    if (nullptr != (TCHAR*)sk.m_srcFileName)
     { 
-        outputTxtV(TXT("%s(%d)\n"),sk.m_srcFileName.c_str(),sk.m_lineNumber);
+        outputTxtV(TXT("%s(%d)\n"), (TCHAR*)sk.m_srcFileName,sk.m_lineNumber);
     }
 }
 
-void StackInfoDisplayer::print( _In_ stlVector<ModInfo> const& modules )
+void SymbolInfoDisplayer::print( _In_ stlVector<ModInfo> const& modules )
 {
     outputTxtV(TXT("Loaded module number :\t%d\nModule Range\t\t\tmofule version\ttmodule timeStamp\t\t\tModule path\n"),modules.size());
     for (stlVector<ModInfo>::const_iterator it=modules.begin();it!=modules.end();++it)
@@ -115,21 +115,21 @@ void StackInfoDisplayer::print( _In_ stlVector<ModInfo> const& modules )
     }
 }
 
-void StackInfoDisplayer::print( _In_ AddressInfo const& ai )
+void SymbolInfoDisplayer::print( _In_ AddressInfo const& ai )
 {
-    outputTxtV(TXT("\nAddressInfo:0X%p\n%s(%d) : %s\n"),ai.m_addr,ai.m_fileName.c_str(),ai.m_lineNumber,ai.m_func.m_name.c_str());
+    outputTxtV(TXT("\nAddressInfo:0X%p\n%s(%d) : %s\n"),ai.m_addr, (TCHAR*)ai.m_fileName,ai.m_lineNumber, (TCHAR*)ai.m_func.m_name);
     outputTxtV(TXT("\nASM function Info\nFunc. Addr\tExp. offset\tFunc. Name\n")); 
-    outputTxtV(TXT("0X%p\t0X%p\t%s\n"),ai.m_func.m_addr,ai.m_func.m_AsmOffset,ai.m_func.m_name.c_str());
+    outputTxtV(TXT("0X%p\t0X%p\t%s\n"),ai.m_func.m_addr,ai.m_func.m_asmOffset, (TCHAR*)ai.m_func.m_name);
 }
 
-void StackInfoDisplayer::print( _In_ ModInfo const& mi )
+void SymbolInfoDisplayer::print( _In_ ModInfo const& mi )
 {
     stlString&  tds = timeDateStamp2Str(mi.m_timeDateStamp);
     stlString&  ver = version2Str(mi.m_verion);
-    outputTxtV(TXT("0X%p-0x%p\t%s\t%s\t%s\t\t%s\n"),mi.m_baseAddr,(DWORD)(mi.m_baseAddr)+mi.m_size,ver.c_str(),tds.c_str(),mi.m_name.c_str(),mi.m_pdbFile.c_str());
+    outputTxtV(TXT("0X%p-0x%p\t%s\t%s\t%s\t\t%s\n"),mi.m_baseAddr,(DWORD)(mi.m_baseAddr)+mi.m_size, ver.c_str(),tds.c_str(), (TCHAR*)mi.m_name, (TCHAR*)mi.m_pdbFile);
 }
 
-void StackInfoDisplayer::print( _In_ MOD_SYMBOL_INFO const& msi )
+void SymbolInfoDisplayer::print( _In_ STD_SYMBOL_INFO const& msi )
 {
     //  static MOD_SYMBOL_INFO last=msi;
     //  ASSERT_AND_LOG(last.TypeIndex==msi.TypeIndex);
@@ -145,14 +145,14 @@ void StackInfoDisplayer::print( _In_ MOD_SYMBOL_INFO const& msi )
     //outputTxtV(TXT("%-d\t"), msi.Tag);
     outputTxtV(TXT("0x%-X\t"), msi.Flags);
     //outputTxtV(TXT("%-d\t"), msi.TypeIndex);
-    outputTxtV(TXTA("%s\t\n"), msi.name.c_str());
+    outputTxtV(TXTA("%s\t\n"), (TCHAR*)msi.name);
 }
 
-void StackInfoDisplayer::print( _In_ stlVector<MOD_SYMBOL_INFO> const& msis )
+void SymbolInfoDisplayer::print( _In_ stlVector<STD_SYMBOL_INFO> const& msis )
 {
     outputTxtV(TXT("\nLoaded symbol number :\t%d\n"),msis.size());
 
-    MOD_SYMBOL_INFO const& msi=msis.front();
+    STD_SYMBOL_INFO const& msi=msis.front();
     if (msis.size()>0)
     {
         outputTxt(TXT("ModBase\t\tTypeIndex\tRegister\tScope\tTag\n"));
@@ -161,13 +161,13 @@ void StackInfoDisplayer::print( _In_ stlVector<MOD_SYMBOL_INFO> const& msis )
     }
 
     outputTxt(TXT("\nAddress\t\tSize\tIndex\tFlags\tname\n"));
-    for (stlVector<MOD_SYMBOL_INFO>::const_iterator it=msis.begin();it!=msis.end();++it)
+    for (stlVector<STD_SYMBOL_INFO>::const_iterator it=msis.begin();it!=msis.end();++it)
     {
         print(*it);
     }
 }
 
-void StackInfoDisplayer::printErrorCode( DWORD errNum/*=GetLastError()*/,_Inout_ stlString* pStlStr )
+void SymbolInfoDisplayer::printErrorCode( DWORD errNum/*=GetLastError()*/,_Inout_ stlString* pStlStr )
 {
     stlString errStr;
 
@@ -197,7 +197,7 @@ void StackInfoDisplayer::printErrorCode( DWORD errNum/*=GetLastError()*/,_Inout_
     }
 }
 
-void StackInfoDisplayer::printExceptStack( _In_ EXCEPTION_RECORD const& ExpRecord )
+void SymbolInfoDisplayer::printExceptStack( _In_ EXCEPTION_RECORD const& ExpRecord )
 {
     using namespace std;
     using namespace MiniMPL;
@@ -249,10 +249,10 @@ void StackInfoDisplayer::printExceptStack( _In_ EXCEPTION_RECORD const& ExpRecor
     }
 }
 
-void StackInfoDisplayer::printExceptSummary( _In_ EXCEPTION_RECORD const& rExp,_In_ AddressInfo const& ai )
+void SymbolInfoDisplayer::printExceptSummary( _In_ EXCEPTION_RECORD const& rExp,_In_ AddressInfo const& ai )
 {
     outputTxtV(TXT("\nException info \nExp. Code\tExp.Addr\tModule\t\t\t\t\tModule name\n"));
-    outputTxtV(TXT("0X%X\t0X%p\t0X%p-0X%p\t%s\n"),rExp.ExceptionCode,rExp.ExceptionAddress,ai.m_mod.m_baseAddr,(DWORD)(ai.m_mod.m_baseAddr)+ai.m_mod.m_size,ai.m_mod.m_name.c_str());
+    outputTxtV(TXT("0X%X\t0X%p\t0X%p-0X%p\t%s\n"),rExp.ExceptionCode,rExp.ExceptionAddress,ai.m_mod.m_baseAddr,(DWORD)(ai.m_mod.m_baseAddr)+ai.m_mod.m_size, (TCHAR*)ai.m_mod.m_name);
 }
 
 #endif

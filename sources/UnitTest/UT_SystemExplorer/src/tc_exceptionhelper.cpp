@@ -8,7 +8,7 @@
 *                       Unique limit: MUST keep those copyright comments in all copies and in supporting documentation.
 * usage demo          : #define RUN_EXAMPLE_EXCEPTIONHELPER to run this demo
 ***********************************************************************************************************************/
-#define RUN_EXAMPLE_EXCEPTIONHELPER
+//#define RUN_EXAMPLE_EXCEPTIONHELPER
 
 #ifdef COMPILE_EXAMPLE_ALL
     #define COMPILE_EXAMPLE_EXCEPTIONHELPER
@@ -91,7 +91,7 @@ namespace UnitTest
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     #if defined(RUN_WARNING_NO_TESTCASE_RUN)
-    GLOBALVAR(RUN_)=(outputTxt((TXT("[Unit test run disabled] exceptionhelper.h\n%s(%d)\n"),TXT(__FILE__),__LINE__)),1);
+    GLOBALVAR(RUN_)=(outputTxt((TXT("[Unit test run disabled] exceptionhelper.h\n%s(%d)\n") TXT(__FILE__) MAKESTR(__LINE__))),1);
     #endif
 
     #if defined(BUILD_WARNING_NO_TESTCASE_RUN)

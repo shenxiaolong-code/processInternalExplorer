@@ -1,4 +1,4 @@
-#include <SystemExplorer/functionhook.h>
+#include <SystemExplorer/hook_function.h>
 #include <MiniMPL/macro_assert.h>
 #include <MiniMPL/stdwrapper.hpp>
 #include <SystemExplorer/executablememoryreadwriter.h>
@@ -87,12 +87,13 @@ namespace Win_x86
 		{
 			rw.readMemory(pOldFunc, &rThunk.m_oldJmpInstruction, sizeof(rThunk.m_oldJmpInstruction));
 			if (rThunk.m_oldJmpInstruction.nPatchType == 0xE9)
-			{   // short jump to relative address , e.g. 00A0424B E9 00 B5 00 00   jmp   oldFunc (0A0F750h)  
-				// instead of jumping to absolute address (0xFF 25) , e.g. 768B6466 FF 25 80 0E 92 76  jmp  dword ptr ds:[76920E80h]
+			{   // short jump to relative address ,                     e.g. 00A0424B E9 00 B5 00 00        jmp  oldFunc (0A0F750h)  
+				// instead of jumping to absolute address (0xFF 25) ,   e.g. 768B6466 FF 25 80 0E 92 76     jmp  dword ptr ds:[76920E80h]
 				
 				//verified : pOldFunc_jmp + dwOffset   + 5	  = OldFunc   //E9 xx xx xx xx is 5 bytes : E9 dwOffset			
 				//pOldFunc_jmp : 00A0424B + 0x0000B500 + 5	  = OldFunc	: 0x0A0F750
-				//need	   : pOldFunc_jmp + new_dwOffset + 5  = pNewFunc_jmp
+                //pNextEIP = 00A0424B + sizeof(E9 00 B5 00 00) , jump offset  = pNewFunc - pNextEIP
+				//need	   : pOldFunc_jmp[00A0424B] + new_dwOffset[0x0000B500] + 5[sizeof(jmp)]  = pNewFunc_jmp
 				//  or	     pOldFunc_jmp + new_dwOffset + 5  = NewFunc = pNewFunc_jmp + m_thunk.m_oldJmpInstruction.dwOffset + 5
 				// => new_dwOffset = pNewFunc_jmp -(pOldFunc_jmp + 5)
 				JmpInstruction_t pNewJmpInstruction = { 0xE9,(DWORD)pNewFunc - ((DWORD)pOldFunc + sizeof(JmpInstruction_t)) };

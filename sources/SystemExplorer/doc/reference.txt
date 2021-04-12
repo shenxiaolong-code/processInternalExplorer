@@ -1,0 +1,3 @@
+https://osandamalith.com/
+https://osandamalith.com/2020/07/19/exploring-the-ms-dos-stub/#more-3910
+the Windows loader only cares about the e_magic and the e_lfanew members from the _IMAGE_DOS_HEADER. 

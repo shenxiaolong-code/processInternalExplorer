@@ -1,4 +1,4 @@
-#include <SystemExplorer/functionhook.h>
+#include <SystemExplorer/hook_function.h>
 #include <MiniMPL/macro_assert.h>
 #include <MiniMPL/stdwrapper.hpp>
 #include <SystemExplorer/executablememoryreadwriter.h>

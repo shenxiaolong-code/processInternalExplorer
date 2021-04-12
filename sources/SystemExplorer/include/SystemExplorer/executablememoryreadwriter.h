@@ -21,7 +21,7 @@ namespace Win_x86
 		SIZE_T		m_size;
 
 	public:
-		InstructionRWGuard(DWORD dwProcessId, LPVOID  lpAddress, SIZE_T  isize, DWORD flNewProtect = PAGE_READWRITE);
+		InstructionRWGuard(DWORD dwProcessId, LPVOID  lpAddress, SIZE_T  isize, DWORD flNewProtect = PAGE_EXECUTE_READWRITE);
 		~InstructionRWGuard();
 
 		operator bool();

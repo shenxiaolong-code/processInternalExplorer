@@ -1,4 +1,4 @@
-#include <SystemExplorer/stackInfoDef.h>
+#include <SystemExplorer/SymbolDataDef.h>
 
 #ifdef MSVC
 #include <MiniMPL\macroDef.h>
@@ -19,7 +19,7 @@ ModInfo::ModInfo()
 FuncInfo::FuncInfo()
 {
     m_addr      = 0;
-    m_AsmOffset = 0;
+    m_asmOffset = 0;
 }
 
 AddressInfo::AddressInfo()
@@ -32,7 +32,7 @@ CallStack::CallStack()
 {
     m_lineNumber    = 0;
     m_funcAddr      = 0;
-    m_AsmOffset     = 0;
+    m_asmOffset     = 0;
 }
 
 CallStackS::CallStackS()
@@ -41,19 +41,30 @@ CallStackS::CallStackS()
     m_threadId  = 0;
 }
 
-_MOD_SYMBOL_INFO& _MOD_SYMBOL_INFO::operator=( SYMBOL_INFO const& rsi )
+template<typename SYMBOL_INFO_T>
+void fill_STL_SYMBOL_INFO(_STL_SYMBOL_INFO& left, SYMBOL_INFO_T const& right)
+{   
+    left.TypeIndex  = right.TypeIndex;      // Type Index of symbol
+    left.Index      = right.Index;
+    left.Size       = right.Size;
+    left.ModBase    = right.ModBase;        // Base Address of module containing this symbol
+    left.Flags      = right.Flags;
+    left.Value      = right.Value;          // Value of symbol, ValuePresent should be 1
+    left.Address    = right.Address;        // Address of symbol including base address of module
+    left.Register   = right.Register;       // register holding value or pointer to value
+    left.Scope      = right.Scope;          // scope of the symbol
+    left.Tag        = right.Tag;            // pdb classification
+    left.name       = right.Name;           // pdb classification
+}
+
+_STL_SYMBOL_INFO& _STL_SYMBOL_INFO::operator=(SYMBOL_INFO const& rsi )
 {
-    TypeIndex=rsi.TypeIndex;        // Type Index of symbol
-    Index=rsi.Index;
-    Size=rsi.Size;
-    ModBase=rsi.ModBase;            // Base Address of module comtaining this symbol
-    Flags=rsi.Flags;
-    Value=rsi.Value;                // Value of symbol, ValuePresent should be 1
-    Address=rsi.Address;            // Address of symbol including base address of module
-    Register=rsi.Register;          // register holding value or pointer to value
-    Scope=rsi.Scope;                // scope of the symbol
-    Tag=rsi.Tag;                    // pdb classification
-    name=rsi.Name;                  // pdb classification
+    fill_STL_SYMBOL_INFO(*this, rsi);
+    return *this;
+}
+_STL_SYMBOL_INFO& _STL_SYMBOL_INFO::operator=(SYMBOL_INFOW const& rsi)
+{
+    fill_STL_SYMBOL_INFO(*this, rsi);
     return *this;
 }
 

@@ -17,12 +17,10 @@ if {%EchoCmd%}=={1} @echo [Enter %~nx0] commandLine: %0 %*
 if not defined NotResetVarialbe call :undefVariable
 ::********************Config begin***************************************
 ::set default quick config
-rem call :quickConfig_MiniMPL
-call :quickConfig_OsBase
 
 ::override default config
-if not defined projectName 		set projectName=OsBase
-if not defined componmentName   set componmentName=thread
+if not defined projectName 		set projectName=SystemExplorer
+if not defined componmentName   set componmentName=SystemExplorer
 ::set subFolderName=innerDetail
 if not defined subFolderName 	set subFolderName=
 :: innerImplement indicates current header file lies in src\...\inc folder, instead of include folder
@@ -251,12 +249,12 @@ exit /b 0
 @echo ***********************************************************************************************************************/
 @echo #define RUN_EXAMPLE_%upperFileName%
 @echo.
-@echo #ifdef COMPILE_EXAMPLE_ALL
-@echo     #define COMPILE_EXAMPLE_%upperFileName%
-@echo #endif
-@echo.
 @echo #ifdef RUN_EXAMPLE_ALL
 @echo     #define RUN_EXAMPLE_%upperFileName%
+@echo #endif
+@echo.
+@echo #ifdef COMPILE_EXAMPLE_ALL
+@echo     #define COMPILE_EXAMPLE_%upperFileName%
 @echo #endif
 @echo.
 @echo #if defined^(RUN_EXAMPLE_%NameMacro%^) ^&^& !defined(COMPILE_EXAMPLE_%NameMacro%^)
@@ -293,7 +291,7 @@ exit /b 0
 @echo.
 @echo ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @echo     #if defined^(RUN_WARNING_NO_TESTCASE_RUN^)
-@echo     GLOBALVAR^(RUN_%NameMacro%^)=^(outputTxtV^(TXT^("[Unit test run disabled] %fileName%%extName%\n%%s(%%d)\n"^),TXT^(__FILE__^),__LINE__^),1^);
+@echo     GLOBALVAR^(RUN_%NameMacro%^)=^(outputTxtV^(TXT^("[Unit test run disabled] %fileName%%extName%\n%%s(%%d)\n"^) TXT^(__FILE__^) MAKESTR(__LINE__)^),1^);
 @echo     #endif
 @echo.
 @echo     #if defined^(BUILD_WARNING_NO_TESTCASE_RUN^)
@@ -304,7 +302,7 @@ exit /b 0
 @echo.
 @echo #else //else of COMPILE_EXAMPLE_%upperFileName%
 @echo     #if defined^(RUN_WARNING_NO_TESTCASE_COMPILE^)
-@echo     GLOBALVAR^(COMPILE_%NameMacro%^)=^(outputTxtV^(TXT^("[Unit test compile disabled] %fileName%%extName%\n%%s(%%d)\n"^),TXT^(__FILE__^),__LINE__^),1^);
+@echo     GLOBALVAR^(COMPILE_%NameMacro%^)=^(outputTxtV^(TXT^("[Unit test compile disabled] %fileName%%extName%\n%%s(%%d)\n"^) TXT^(__FILE__^) MAKESTR(__LINE__)^),1^);
 @echo     #endif
 @echo.
 @echo     #if defined^(BUILD_WARNING_NO_TESTCASE_COMPILE^)

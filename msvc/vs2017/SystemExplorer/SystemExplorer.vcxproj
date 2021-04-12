@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{383B6936-A825-4D4A-AE0C-2E39641CCF5F}</ProjectGuid>
+    <RootNamespace>SystemExplorer</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="SystemExplorer.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="SystemExplorer.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>14.0.25431.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\sources\SystemExplorer\src\exceptionhelper.cpp" />
+    <ClCompile Include="..\..\..\sources\SystemExplorer\src\executablememoryreadwriter.cpp" />
+    <ClCompile Include="..\..\..\sources\SystemExplorer\src\hook_event_win.cpp" />
+    <ClCompile Include="..\..\..\sources\SystemExplorer\src\hook_function_exported.cpp" />
+    <ClCompile Include="..\..\..\sources\SystemExplorer\src\hook_function_user.cpp" />
+    <ClCompile Include="..\..\..\sources\SystemExplorer\src\getCurContext.c" />
+    <ClCompile Include="..\..\..\sources\SystemExplorer\src\HoverWindowMonitor.cpp" />
+    <ClCompile Include="..\..\..\sources\SystemExplorer\src\PEFileExplorer.cpp" />
+    <ClCompile Include="..\..\..\sources\SystemExplorer\src\peheaderhelper.cpp" />
+    <ClCompile Include="..\..\..\sources\SystemExplorer\src\ProcessExplorer.cpp" />
+    <ClCompile Include="..\..\..\sources\SystemExplorer\src\SymbolExplorer.cpp" />
+    <ClCompile Include="..\..\..\sources\SystemExplorer\src\SymbolDataDef.cpp" />
+    <ClCompile Include="..\..\..\sources\SystemExplorer\src\SymbolDataDisplayer.cpp" />
+    <ClCompile Include="..\..\..\sources\SystemExplorer\src\WindowExplorer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\sources\SystemExplorer\include\SystemExplorer\callback_cpp2c.h" />
+    <ClInclude Include="..\..\..\sources\SystemExplorer\include\SystemExplorer\exceptionhelper.h" />
+    <ClInclude Include="..\..\..\sources\SystemExplorer\include\SystemExplorer\hook_event_win.h" />
+    <ClInclude Include="..\..\..\sources\SystemExplorer\include\SystemExplorer\hook_event_win_def.h" />
+    <ClInclude Include="..\..\..\sources\SystemExplorer\include\SystemExplorer\hook_function.h" />
+    <ClInclude Include="..\..\..\sources\SystemExplorer\include\SystemExplorer\HoverWindowMonitor.h" />
+    <ClInclude Include="..\..\..\sources\SystemExplorer\include\SystemExplorer\HoverWindowReceiver.hpp" />
+    <ClInclude Include="..\..\..\sources\SystemExplorer\include\SystemExplorer\PEFileExplorer.h" />
+    <ClInclude Include="..\..\..\sources\SystemExplorer\include\SystemExplorer\peheaderdef.h" />
+    <ClInclude Include="..\..\..\sources\SystemExplorer\include\SystemExplorer\peheaderhelper.h" />
+    <ClInclude Include="..\..\..\sources\SystemExplorer\include\SystemExplorer\ProcessExplorer.h" />
+    <ClInclude Include="..\..\..\sources\SystemExplorer\include\SystemExplorer\ProcessInfoDef.h" />
+    <ClInclude Include="..\..\..\sources\SystemExplorer\include\SystemExplorer\SymbolExplorer.h" />
+    <ClInclude Include="..\..\..\sources\SystemExplorer\include\SystemExplorer\SymbolDataDef.h" />
+    <ClInclude Include="..\..\..\sources\SystemExplorer\include\SystemExplorer\WindowExplorer.h" />
+    <ClInclude Include="..\..\..\sources\SystemExplorer\include\SystemExplorer\WindowinfoDef.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

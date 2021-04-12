@@ -15,6 +15,7 @@ purpose :	data structure definition for StackExplorer
 #pragma warning(disable:4091)
 #include <imagehlp.h>
 #pragma warning(pop)
+#include <comutil.h>
 
 struct ModInfo
 {
@@ -23,31 +24,31 @@ struct ModInfo
     DWORD               m_size;
     DWORD               m_timeDateStamp;
     DWORD               m_checkSum;
-    stlString           m_name;
+    _bstr_t             m_name;
     unsigned __int64    m_verion;
 
     DWORD               m_numSyms;
     SYM_TYPE            m_symType;
     PVOID               m_entryPoint;   //for exe : main/winMain  for dll : DllMain
-    stlString           m_entryName;
-    stlString           m_pdbFile;
+    _bstr_t             m_entryName;
+    _bstr_t             m_pdbFile;
 
     ModInfo();
 };
 
 struct FuncInfo
 {
-    stlString       m_name;
-    stlString       m_unDecorateName;
+    _bstr_t         m_name;
+    _bstr_t         m_unDecorateName;
     PVOID           m_addr;
-    DWORD           m_AsmOffset;
+    DWORD64         m_asmOffset;
     FuncInfo();
 };
 
 struct AddressInfo
 {
     PVOID               m_addr;
-    stlString           m_fileName;
+    _bstr_t             m_fileName;
     DWORD               m_lineNumber;
     ModInfo             m_mod;
     FuncInfo            m_func;
@@ -56,11 +57,11 @@ struct AddressInfo
 
 struct CallStack
 {
-    stlString           m_funcName;
-    stlString           m_srcFileName;
-    int                 m_lineNumber;
+    _bstr_t             m_funcName;
+    _bstr_t             m_srcFileName;
+    DWORD               m_lineNumber;
     PVOID               m_funcAddr;
-    DWORD               m_AsmOffset;
+    DWORD64             m_asmOffset;
     CallStack();
 };
 
@@ -74,22 +75,25 @@ struct CallStackS
 };
 
 //C++ version of SYMBOL_INFO
-typedef struct _MOD_SYMBOL_INFO 
+typedef struct _STL_SYMBOL_INFO 
 {   //should improve to module path/name and filter repeated info
     ULONG       TypeIndex;        // Type Index of symbol
     ULONG       Index;
     ULONG       Size;
-    ULONG64     ModBase;          // Base Address of module comtaining this symbol
+    ULONG64     ModBase;          // Base Address of module containing this symbol
     ULONG       Flags;
     ULONG64     Value;            // Value of symbol, ValuePresent should be 1
     ULONG64     Address;          // Address of symbol including base address of module
     ULONG       Register;         // register holding value or pointer to value
     ULONG       Scope;            // scope of the symbol
     ULONG       Tag;              // pdb classification
-    stlStringA  name;             // needn't stlStringW , because symbol Name MUST be English
+    _bstr_t     name;             // needn't stlStringW , because symbol Name MUST be English
 
-    _MOD_SYMBOL_INFO& operator=(SYMBOL_INFO const& rsi);
-} MOD_SYMBOL_INFO, *LPMOD_SYMBOL_INFO;
+    DWORD64     asmOffset;
+
+    _STL_SYMBOL_INFO& operator=(SYMBOL_INFO const& rsi);
+    _STL_SYMBOL_INFO& operator=(SYMBOL_INFOW const& rsi);
+} STD_SYMBOL_INFO, *LPSTD_SYMBOL_INFO;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 struct ExceptionItem

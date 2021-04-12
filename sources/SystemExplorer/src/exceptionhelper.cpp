@@ -5,10 +5,14 @@
 #include <TlHelp32.h>
 #include <signal.h>
 #include <new.h>
-#include <SystemExplorer/StackExplorer.h>
+#include <SystemExplorer/SymbolExplorer.h>
 #include "MiniMPL/fromToString.hpp"
 #include "MiniMPL/stdwrapper.hpp"
 #include <winnt.h>
+
+#if _MSC_VER > 1910
+#include <intrin.h>		//vs2017 include
+#endif
 
 #pragma comment(lib,"Dbghelp.lib")  //for MiniDumpWriteDump
 
@@ -21,7 +25,7 @@ namespace ExceptionHandler
 		StackExplorer se;
 		PVOID pCaller = se.getCallerAddr(1);
 		AddressInfo ai;
-		se.resloveAddrInfo(pCaller, ai);
+		se.resloveAddrSymbol(pCaller, ai);
 
 		std::wstringstream ss;
 		ss << L"\r\ncaller : " << ai.m_func.m_name << L"\r\nparameter info :";
@@ -31,7 +35,7 @@ namespace ExceptionHandler
 		CallStackS cs;
 		se.resloveStacks(cs);
 
-		StackInfoDisplayer sid;
+		SymbolInfoDisplayer sid;
 		sid.print(ai);
 		sid.print(cs);
 

@@ -12,6 +12,9 @@
 #include <SystemExplorer/PEFileExplorer.h>
 #include <MiniMPL/macro_makeVar.h>
 
+//Using Hooks
+//https://docs.microsoft.com/zh-cn/windows/win32/winmsg/using-hooks?redirectedfrom=MSDN
+
 namespace Win_x86
 {
 	struct ExportedFuncThunk;
