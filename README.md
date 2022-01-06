@@ -17,6 +17,8 @@ based on miniMPL lib,  provide excel access and many system explorer
   current network example only provides E9 hook  -- it is not enough for complete hook.  
 - PEFileExplorer  
   Help to parse/verify PE file header format.  
+### According information printer is also provided.  
+  to simply usage.
 
 # Excel
 - provide microsoft Excel access by C++ with high performance.
