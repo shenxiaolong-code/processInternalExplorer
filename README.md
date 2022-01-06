@@ -1,5 +1,5 @@
 # Features
-based on miniMPL lib,  provide excel access and many system explorers
+based on miniMPL lib,  provide excel access, and many system explorers
 
 # SystemExplorer
 - ProcessExplorer  
@@ -13,7 +13,7 @@ based on miniMPL lib,  provide excel access and many system explorers
 - exceptionHelper  
   help to capture all exceptions and generate a window application dump file for developer remote analysis. (for windows C++ application).
 - executablememoryreadwriter  
-  provide runtime instruction code memory modification with safe method.
+  provide runtime instruction code memory modification with the safe method.
 - HookHelper  
   provide function hook helper( include E9 and E8 level hook ) and user function hook.  
   current network example only provides an E9 hook  -- it is not enough for the complete hook.  
@@ -23,6 +23,6 @@ based on miniMPL lib,  provide excel access and many system explorers
   to simply usage.
 
 # Excel
-- provide microsoft Excel access by C++ with high performance.
-- read/write big block Excel data quickly.
+- provide Microsoft Excel access by C++ with **high performance**.
+- read/write **big block** Excel data quickly.
 - template-based data type parse.
