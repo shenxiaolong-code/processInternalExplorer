@@ -1,5 +1,5 @@
 # Features
-based on miniMPL lib,  provide excel access, and many system explorers
+based on miniMPL lib,  provide many system explorers and quick excel access without MFC support.
 
 # SystemExplorer
 - ProcessExplorer  
