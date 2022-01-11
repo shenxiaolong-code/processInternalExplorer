@@ -9,7 +9,7 @@ based on miniMPL lib,  provide many system explorers and quick excel access with
 - SymbolExplorer  
   given a code address, return its :  
   function name, source file path, line number  
-  module-info (module name, size,start-end address).
+  module-info (module name , module path, size,start-end address).
 - exceptionHelper  
   help to capture all exceptions and generate a window application dump file for developer remote analysis. (for windows C++ application).
 - executablememoryreadwriter  
