@@ -23,6 +23,6 @@ based on miniMPL lib,  provide many system explorers and quick excel access with
   to simply usage.
 
 # Excel
-- provide Microsoft Excel access by C++ with **high performance**.
+- provide Microsoft Excel access by C++ with **high performance** without MFC environment support.
 - read/write **big block** Excel data quickly.
 - template-based data type parse.
