@@ -2,10 +2,6 @@
 based on miniMPL lib,  provide many system explorers and quick excel access without MFC support.
 
 # SystemExplorer
-- ProcessExplorer  
-  provides windows process inner information.  
-- WindowExplorer  
-  highlight window control with a red rectangle when your mouse hovers and show the control info (class name, size, X-Y dimension).
 - SymbolExplorer  
   given a code address, return its :  
   function name, source file path, line number  
@@ -16,7 +12,11 @@ based on miniMPL lib,  provide many system explorers and quick excel access with
   provide runtime instruction code memory modification with the safe method.
 - HookHelper  
   provide function hook helper( include E9 and E8 level hook ) and user function hook.  
-  current network example only provides an E9 hook  -- it is not enough for the complete hook.  
+  current internet example only provides an E9 hook  -- it is not enough for the complete hook.  
+- ProcessExplorer  
+  provides windows process inner information.  
+- WindowExplorer  
+  highlight window control with a red rectangle when your mouse hovers and show the control info (class name, size, X-Y dimension).
 - PEFileExplorer  
   Help to parse/verify PE file header format.  
 ### According information printer is also provided.  
@@ -25,4 +25,8 @@ based on miniMPL lib,  provide many system explorers and quick excel access with
 # Excel
 - provide Microsoft Excel access by C++ with **high performance** without MFC environment support.
 - read/write **big block** Excel data quickly.
-- template-based data type parse.
+- template-based data type parse.  
+
+# usage examples  
+  you can check the usage examples with the test case source:  
+  https://github.com/shenxiaolong-code/processInternalExplorer/tree/master/sources/UnitTest
